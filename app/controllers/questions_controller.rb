@@ -5,14 +5,14 @@ class QuestionsController < ApplicationController
     @questions = Question.all
   end
 
-  def show  	
+  def show
   end
 
   def new
     @question = Question.new
   end
 
-  def edit  	
+  def edit
   end
 
   def create
@@ -35,10 +35,10 @@ class QuestionsController < ApplicationController
 
   def destroy
     @question.destroy
-  	redirect_to questions_path
+    redirect_to questions_path
   end
 
-  private 
+  private
 
   def load_question
     @question = Question.find(params[:id])
