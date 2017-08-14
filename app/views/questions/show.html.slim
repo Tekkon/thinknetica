@@ -1,0 +1,6 @@
+h1 "Question #{@question.title}"
+
+=p @question.body
+
+- @question.answers.each do |a|
+  =p a.body
