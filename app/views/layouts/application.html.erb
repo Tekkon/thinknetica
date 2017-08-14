@@ -9,6 +9,10 @@
     <p class="notice"><%= notice %></p>
     <p class="alert"><%= alert %></p>
 
+    <% if user_signed_in? %>
+      <a href="/logout">Sign out</a>
+    <% end %>
+
     <%= yield %>
   </body>
 </html>
