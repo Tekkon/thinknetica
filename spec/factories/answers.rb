@@ -4,6 +4,6 @@ FactoryGirl.define do
   end
 
   factory :invalid_answer, class: 'Answer' do
-  	body nil
+    body nil
   end
 end
