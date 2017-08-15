@@ -8,10 +8,9 @@ class AnswersController < ApplicationController
 
   def create
     @answer = @question.answers.new(answer_params)
+    @answer.user_id = current_user.id
 
-    if @answer.save
-      flash[:notice] = 'Your answer is created successfully.'
-    end
+    flash[:notice] = 'Your answer is created successfully.' if @answer.save
 
     redirect_to question_path(@question)
   end
@@ -19,7 +18,7 @@ class AnswersController < ApplicationController
   private
 
   def answer_params
-    params.require(:answer).permit(:body, :user_id)
+    params.require(:answer).permit(:body)
   end
 
   def find_question
