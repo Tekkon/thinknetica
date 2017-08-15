@@ -1,6 +1,16 @@
-h1 "Question #{@question.title}"
+h1
+  = @question.title
 
 =p @question.body
 
+h2 Answers
 - @question.answers.each do |a|
   =p a.body
+
+h2 Add an answer
+= form_for [@question, @question.answers.build] do |f|
+  p
+    = f.label :body
+    = f.text_field :body
+  p
+    = f.submit 'Create an answer'
