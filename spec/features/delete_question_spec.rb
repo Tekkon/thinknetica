@@ -23,15 +23,13 @@ feature 'User can delete his question', %q{
     another_user = create(:user)
     create(:question, user_id: another_user.id)
     visit questions_path
-    click_on 'Delete this question'
-    expect(page).to have_content 'You can delete only yours questions.'
+    expect(page).to_not have_content 'Delete this question'
   end
 
   scenario 'Non-authenticated user tries to delete a question' do
     create(:question, user_id: user.id)
     visit questions_path
-    click_on 'Delete this question'
-    expect(page).to have_content 'You need to sign in or sign up before continuing.'
+    expect(page).to_not have_content 'Delete this question'
   end
 
 end

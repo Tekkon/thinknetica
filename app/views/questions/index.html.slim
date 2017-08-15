@@ -3,7 +3,8 @@ h1 Question list
 - @questions.each do |q|
   =p q.title
   =p q.body
-  =p link_to 'Delete this question', question_path(q), method: :delete
+  - if user_signed_in? && current_user.author_of?(q)
+    =p link_to 'Delete this question', question_path(q), method: :delete
 
 =p
 =p link_to 'Ask question', new_question_path
