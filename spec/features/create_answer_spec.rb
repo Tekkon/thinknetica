@@ -16,8 +16,18 @@ feature 'User can create an answer on the question page', %q{
     fill_in 'Body', with: 'This is my answer.'
     click_on 'Create an answer'
 
-    expect(page).to have_content question.answers.last.body
+    expect(page).to have_content 'This is my answer.'
     expect(page).to have_content 'Your answer is created successfully.'
+  end
+
+  scenario 'Authenticated user creates an answer with invalid parameters' do
+    sign_in(user)
+    visit question_path question
+
+    fill_in 'Body', with: nil
+    click_on 'Create an answer'
+
+    expect(page).to have_content 'can\'t be blank'
   end
 
   scenario 'Non-authenticated user tries to create an answer' do

@@ -10,7 +10,8 @@ h2 Answers
     =p link_to 'Delete this answer', question_answer_path(@question,a), method: :delete
 
 h2 Add an answer
-= form_for [@question, @question.answers.build] do |f|
+= form_for [@question, @answer] do |f|
+  = render "shared/error_messages", :target => @answer
   p
     = f.label :body
     = f.text_field :body

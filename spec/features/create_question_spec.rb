@@ -17,7 +17,21 @@ feature 'Create question', %q{
     fill_in 'Body', with: 'test text'
     click_on 'Create'
 
+    expect(page).to have_content 'Test question'
+    expect(page).to have_content 'test text'
     expect(page).to have_content 'Your question is created successfully.'
+  end
+
+  scenario 'Authenticated user creates question with invalid parameters' do
+    sign_in(user)
+
+    visit questions_path
+    click_on 'Ask question'
+    fill_in 'Title', with: nil
+    fill_in 'Body', with: nil
+    click_on 'Create'
+
+    expect(page).to have_content 'can\'t be blank'
   end
 
   scenario 'Non-authenticated user tries to create question' do
