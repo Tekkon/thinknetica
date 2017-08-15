@@ -6,13 +6,16 @@ feature 'User can browse a list of questions', %q{
   I want to be able to browse a list of questions
 } do
 
-  given(:question) { create(:question, user: create(:user)) }
+  given(:questions) { create_list(:sequence_question, 2, user: create(:user)) }
 
   scenario 'User browses a list of questions' do
-    visit questions_path question
+    questions
+    visit questions_path
 
-    expect(page).to have_content(question.title)
-    expect(page).to have_content(question.body)
+    questions.each do |q|
+      expect(page).to have_content(q.title)
+      expect(page).to have_content(q.body)
+    end
   end
 
 end
@@ -25,15 +28,18 @@ feature 'User can browse a question and its answers', %q{
 
   given(:user) { create(:user) }
   given(:question) { create(:question, user: user) }
+  given(:answers) { create_list(:sequence_answer, 2, question: question, user: user) }
 
   scenario 'User browses a question and its answers' do
-    answer = create(:answer, question: question, user: user)
-
+    answers
     visit question_path question
 
     expect(page).to have_content question.title
     expect(page).to have_content question.body
-    expect(page).to have_content answer.body
+
+    answers.each do |a|
+      expect(page).to have_content a.body
+    end
   end
 
 end

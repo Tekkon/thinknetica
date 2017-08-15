@@ -5,7 +5,7 @@ RSpec.describe QuestionsController, type: :controller do
   let(:question) { create(:question, user: user) }
 
   describe 'GET #index' do
-    let(:questions) { [create(:question, user: user), create(:question, user: user)] }
+    let(:questions) { create_list(:sequence_question, 2, user: user) }
 
     before { get :index }
 
