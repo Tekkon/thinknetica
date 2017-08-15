@@ -1,5 +1,5 @@
 class AnswersController < ApplicationController
-  before_action :authenticate_user!, excpet: :new
+  before_action :authenticate_user!, except: :new
   before_action :find_question, only: [:new, :create]
 
   def new
@@ -13,6 +13,19 @@ class AnswersController < ApplicationController
     flash[:notice] = 'Your answer is created successfully.' if @answer.save
 
     redirect_to question_path(@question)
+  end
+
+  def destroy
+    @answer = Answer.find(params[:id])
+
+    if current_user.author_of?(@answer)
+      @answer.destroy
+      flash[:notice] = 'Your answer is deleted successfully.'
+    else
+      flash[:notice] = 'You can delete only yours answers.'
+    end
+
+    redirect_to question_path(@answer.question)
   end
 
   private
