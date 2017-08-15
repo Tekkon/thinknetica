@@ -6,7 +6,7 @@ feature 'User can browse a list of questions', %q{
   I want to be able to browse a list of questions
 } do
 
-  given(:question) { create(:question) }
+  given(:question) { create(:question, user: create(:user)) }
 
   scenario 'User browses a list of questions' do
     visit questions_path question
@@ -23,10 +23,11 @@ feature 'User can browse a question and its answers', %q{
   I want to be able to browse a question and its answers
 } do
 
-  given(:question) { create(:question) }
+  given(:user) { create(:user) }
+  given(:question) { create(:question, user: user) }
 
   scenario 'User browses a question and its answers' do
-    answer = create(:answer, question_id: question.id)
+    answer = create(:answer, question: question, user: user)
 
     visit question_path question
 

@@ -12,5 +12,6 @@ h2 Add an answer
   p
     = f.label :body
     = f.text_field :body
+    = f.hidden_field :user_id, value: user_signed_in? ? current_user.id : nil
   p
     = f.submit 'Create an answer'

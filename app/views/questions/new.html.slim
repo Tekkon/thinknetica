@@ -3,4 +3,5 @@
   = f.text_field :title
   = f.label :body
   = f.text_area :body
+  = f.hidden_field :user_id, value: user_signed_in? ? current_user.id : nil
   = f.submit 'Create'

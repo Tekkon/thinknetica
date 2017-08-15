@@ -7,7 +7,7 @@ feature 'User can create an answer on the question page', %q{
 } do
 
   given(:user) { create(:user) }
-  given(:question) { create(:question) }
+  given(:question) { create(:question, user: user) }
 
   scenario 'Authenticated user creates an answer' do
     sign_in(user)
