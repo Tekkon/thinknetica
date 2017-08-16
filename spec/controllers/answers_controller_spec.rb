@@ -19,9 +19,9 @@ RSpec.describe AnswersController, type: :controller do
         expect(question.answers.last.user_id).to eq user.id
       end
 
-      it 'renders question show view' do
+      it 'redirects to question show view' do
         post :create, params: { question_id: question, answer: attributes_for(:answer) }
-        expect(response).to render_template 'questions/show'
+        expect(response).to redirect_to question_path(question)
       end
     end
 
