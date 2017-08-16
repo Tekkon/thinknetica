@@ -115,8 +115,8 @@ RSpec.describe QuestionsController, type: :controller do
 
       it 'does not change question attributes' do
         question.reload
-        expect(question.title).to eq 'Question'
-        expect(question.body).to eq 'Hi! I have a question.'
+        expect(question.title).to eq 'What happened write after the big bang?'
+        expect(question.body).to eq 'I really want to know!'
       end
 
       it 're-renders edit view' do
