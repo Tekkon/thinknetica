@@ -67,7 +67,7 @@ RSpec.describe QuestionsController, type: :controller do
       it 'sets a current_user to the new question' do
         sign_in_the_user(user)
         post :create, params: { question: attributes_for(:question) }
-        expect(question.user_id).to eq user.id
+        expect(assigns(:question).user_id).to eq user.id
       end
 
       it 'redirects to show view' do
