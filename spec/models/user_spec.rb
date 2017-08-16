@@ -11,27 +11,13 @@ RSpec.describe User, type: :model do
     let(:another_user) { create(:user) }
     let(:question) { create(:question, user: user) }
     let(:another_question) { create(:question, user: another_user) }
-    let(:answer) { create(:answer, user: user, question: question) }
-    let(:another_answer) { create(:answer, user: another_user, question: another_question) }
 
     it 'returns true if user is the author of the question' do
-      user.author_of?(question).should eq true
+      expect(user).to be_author_of(question)
     end
 
     it 'returns false if user is not the author of the question' do
-      user.author_of?(another_question).should eq false
-    end
-
-    it 'returns true if user is the quthor of the answer' do
-      user.author_of?(answer).should eq true
-    end
-
-    it 'returns false if user is not the author of the answer' do
-      user.author_of?(another_answer).should eq false
-    end
-
-    it 'returns exception if object is not a question nor answer' do
-      expect { user.author_of?(another_user) }.to raise_error
+      expect(user).to_not be_author_of(another_question)
     end
   end
 end
