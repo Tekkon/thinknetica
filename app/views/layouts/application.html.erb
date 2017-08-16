@@ -9,9 +9,25 @@
     <p class="notice"><%= notice %></p>
     <p class="alert"><%= alert %></p>
 
-    <% if user_signed_in? %>
-      <a href="/logout">Sign out</a>
-    <% end %>
+    <ul>
+      <% if user_signed_in? %>
+        <li>
+          <%= link_to('Sign out', destroy_user_session_path, method: :delete) %>
+        </li>
+      <% else %>
+        <% unless current_page?(new_user_session_path) %>
+          <li>
+            <%= link_to('Sign in', new_user_session_path) %>
+          </li>
+        <% end %>
+
+        <% unless current_page?(new_user_registration_path) %>
+          <li>
+            <%= link_to('Sign up', new_user_registration_path) %>
+          </li>
+        <% end %>
+      <% end %>
+    </ul>
 
     <%= yield %>
   </body>
