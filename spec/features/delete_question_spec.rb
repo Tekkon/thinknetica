@@ -7,13 +7,17 @@ feature 'User can delete his question', %q{
 } do
 
   given(:user) { create(:user) }
+  given(:question) { create(:question, user_id: user.id) }
 
   scenario 'Authenticated user tries to delete his question' do
     sign_in(user)
 
-    create(:question, user_id: user.id)
+    question
     visit questions_path
     click_on 'Delete this question'
+
+    expect(page).to_not have_content question.title
+    expect(page).to_not have_content question.body
     expect(page).to have_content 'Your question is deleted successfully.'
   end
 

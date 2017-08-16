@@ -1,16 +1,16 @@
 FactoryGirl.define do
   sequence :title do |n|
-    "Question #{n}"
+    "What happened #{n}?"
   end
 
   factory :question do
-    title 'Question'
-    body 'Hi! I have a question.'
+    title 'What happened write after the big bang?'
+    body 'I really want to know!'
   end
 
   factory :sequence_question, class: 'Question' do
     title
-    body 'Hi! I have a question.'
+    body 'I really want to know!'
   end
 
   factory :invalid_question, class: 'Question' do
