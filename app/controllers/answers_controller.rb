@@ -20,11 +20,11 @@ class AnswersController < ApplicationController
     if current_user.author_of?(@answer)
       @answer.destroy
       flash[:notice] = 'Your answer is deleted successfully.'
+      redirect_to question_path(@answer.question)
     else
       flash[:notice] = 'You can delete only yours answers.'
+      render 'questions/show'
     end
-
-    redirect_to question_path(@answer.question)
   end
 
   private
