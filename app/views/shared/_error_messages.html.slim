@@ -1,3 +1,4 @@
-- target.errors.each do |attr, msg|
-  =p target.errors.full_messages_for(attr)
-  br
+- if target.errors
+  - target.errors.full_messages.each do |msg|
+    =p msg
+    br

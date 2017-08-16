@@ -8,7 +8,7 @@ class AnswersController < ApplicationController
 
     flash[:notice] = 'Your answer is created successfully.' if @answer.save
 
-    redirect_to question_path(@question)
+    render 'questions/show'
   end
 
   def destroy

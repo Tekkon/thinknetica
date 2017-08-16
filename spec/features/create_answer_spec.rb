@@ -27,7 +27,7 @@ feature 'User can create an answer on the question page', %q{
     fill_in 'Body', with: nil
     click_on 'Create an answer'
 
-    expect(page).to have_content 'can\'t be blank'
+    expect(page).to have_content 'Body can\'t be blank'
   end
 
   scenario 'Non-authenticated user tries to create an answer' do

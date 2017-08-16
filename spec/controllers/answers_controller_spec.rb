@@ -19,9 +19,9 @@ RSpec.describe AnswersController, type: :controller do
         expect(question.answers.last.user_id).to eq user.id
       end
 
-      it 'redirects to question show view' do
+      it 'renders question show view' do
         post :create, params: { question_id: question, answer: attributes_for(:answer) }
-        expect(response).to redirect_to question_path(question)
+        expect(response).to render_template 'questions/show'
       end
     end
 
@@ -32,7 +32,7 @@ RSpec.describe AnswersController, type: :controller do
 
       it 're-renders question view' do
         post :create, params: { question_id: question, answer: attributes_for(:invalid_answer) }
-        expect(response).to redirect_to question_path(question)
+        expect(response).to render_template 'questions/show'
       end
     end
   end
