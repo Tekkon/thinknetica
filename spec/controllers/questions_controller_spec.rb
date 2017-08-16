@@ -5,7 +5,7 @@ RSpec.describe QuestionsController, type: :controller do
   let(:question) { create(:question, user: user) }
 
   describe 'GET #index' do
-    let(:questions) { create_list(:sequence_question, 2, user: user) }
+    let(:questions) { create_list(:question, 2, user: user) }
 
     before { get :index }
 
@@ -115,8 +115,8 @@ RSpec.describe QuestionsController, type: :controller do
 
       it 'does not change question attributes' do
         question.reload
-        expect(question.title).to eq 'What happened write after the big bang?'
-        expect(question.body).to eq 'I really want to know!'
+        expect(question.title).to include 'What happened write after the big bang?'
+        expect(question.body).to include 'I really want to know!'
       end
 
       it 're-renders edit view' do
