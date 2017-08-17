@@ -4,8 +4,8 @@ h1
 =p @question.body
 
 h2 Answers
-.answers
-  = render @question.answers
+= render @question.answers
+.answer
 
 - if user_signed_in?
   h2 Add an answer
