@@ -17,6 +17,7 @@ gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.2'
+gem 'coffee-script-source', '1.8.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 
@@ -42,6 +43,11 @@ group :development, :test do
   gem 'byebug', platform: :mri
   gem 'rspec-rails'
   gem 'factory_girl_rails'
+  gem 'capybara'
+  gem 'rails-controller-testing'
+  gem 'launchy'
+  gem 'selenium-webdriver'
+  gem 'database_cleaner'
 end
 
 group :development do
@@ -51,9 +57,6 @@ end
 
 group :test do
   gem 'shoulda-matchers', git: 'https://github.com/thoughtbot/shoulda-matchers.git', branch: 'rails-5'
-  gem 'capybara'
-  gem 'rails-controller-testing'
-  gem 'launchy'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
