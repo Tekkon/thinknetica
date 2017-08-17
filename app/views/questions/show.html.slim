@@ -5,7 +5,7 @@ h1
 
 h2 Answers
 .answers
-  = render 'answers'
+  = render @question.answers
 
 - if user_signed_in?
   h2 Add an answer

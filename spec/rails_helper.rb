@@ -93,6 +93,6 @@ end
 Capybara.register_driver :selenium do |app|
   profile = Selenium::WebDriver::Firefox::Options.new.profile
   client = Selenium::WebDriver::Remote::Http::Default.new
-  client.read_timeout = 90 # instead of the default 60
+  client.read_timeout = 60
   Capybara::Selenium::Driver.new(app, browser: :firefox, profile: profile, http_client: client)
 end
