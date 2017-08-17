@@ -3,9 +3,9 @@ h1
 
 =p @question.body
 
-h2 Answers
-= render @question.answers
-.answer
+.answers
+  h2 Answers
+  = render @question.answers
 
 - if user_signed_in?
   h2 Add an answer

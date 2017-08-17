@@ -17,7 +17,7 @@ feature 'User can create an answer on the question page', %q{
     click_on 'Create an answer'
 
     expect(current_path).to eq question_path(question)
-    within '.answer' do
+    within '.answers' do
       expect(page).to have_content 'This is my answer.'
     end
   end
