@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative 'features_helper'
 
 feature 'User can create an answer on the question page', %q{
   In order to create an answer on the question page
@@ -26,10 +26,10 @@ feature 'User can create an answer on the question page', %q{
     sign_in(user)
     visit question_path question
 
-    fill_in 'Body', with: nil
+    #fill_in 'Body', with: nil
     click_on 'Create an answer'
 
-    expect(page).to have_content 'Body can\'t be blank'
+    expect(page).to have_content "Body can't be blank"
     expect(current_path).to eq question_path(question)
   end
 

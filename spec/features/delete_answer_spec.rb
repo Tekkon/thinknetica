@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative 'features_helper'
 
 feature 'User can delete his answer', %q{
   In order to delete my answers
