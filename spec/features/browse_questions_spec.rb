@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative 'features_helper'
 
 feature 'User can browse a list of questions', %q{
   In order to get a list of questions
