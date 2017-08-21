@@ -3,18 +3,17 @@ h1
 
 =p @question.body
 
-h2 Answers
-- @question.answers.each do |a|
-  - next unless a.persisted?
-  =p a.body
-  - if user_signed_in? && current_user.author_of?(a)
-    =p link_to 'Delete this answer', question_answer_path(@question,a), method: :delete
+.answers
+  h2 Answers
+  = render @question.answers
 
-h2 Add an answer
-= form_for [@question, @answer] do |f|
-  = render "shared/error_messages", target: @answer
-  p
-    = f.label :body
-    = f.text_field :body
-  p
-    = f.submit 'Create an answer'
+- if user_signed_in?
+  h2 Add an answer
+  = form_for [@question, @answer], remote: true do |f|
+    .errors
+      = render "shared/error_messages", target: @answer
+    p
+      = f.label :body
+      = f.text_field :body
+    p
+      = f.submit 'Create an answer'
