@@ -49,24 +49,19 @@ RSpec.describe AnswersController, type: :controller do
       before { sign_in_the_user(user) }
 
       it 'deletes the answer' do
-        expect { delete :destroy, params: { question_id: question, id: answer.id } }.to change(Answer, :count).by(-1)
-      end
-
-      it 'redirects to question view' do
-        delete :destroy, params: { question_id: question, id: answer.id }
-        expect(response).to redirect_to question_path(question)
+        expect { delete :destroy, params: { question_id: question, id: answer.id }, format: :js }.to change(Answer, :count).by(-1)
       end
     end
 
     context 'user is not the author of the answer' do
       it 'not deletes the answer' do
-        expect { delete :destroy, params: { question_id: question, id: answer.id } }.to_not change(Answer, :count)
+        expect { delete :destroy, params: { question_id: question, id: answer.id }, format: :js }.to_not change(Answer, :count)
       end
+    end
 
-      it 'renders question view' do
-        delete :destroy, params: { question_id: question, id: answer.id }
-        expect(response).to render_template 'questions/show'
-      end
+    it 'renders destroy template' do
+      delete :destroy, params: { question_id: question, id: answer.id }, format: :js
+      expect(response).to render_template :destroy
     end
   end
 

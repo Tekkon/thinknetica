@@ -13,7 +13,7 @@ feature 'User can create an answer on the question page', %q{
     sign_in(user)
     visit question_path question
 
-    fill_in 'Body', with: 'This is my answer.'
+    fill_in 'create-answer-body', with: 'This is my answer.'
     click_on 'Create an answer'
 
     expect(current_path).to eq question_path(question)
@@ -25,8 +25,7 @@ feature 'User can create an answer on the question page', %q{
   scenario 'Authenticated user creates an answer with invalid parameters', js: true do
     sign_in(user)
     visit question_path question
-
-    #fill_in 'Body', with: nil
+    
     click_on 'Create an answer'
 
     expect(page).to have_content "Body can't be blank"

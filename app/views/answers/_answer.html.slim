@@ -4,7 +4,7 @@
     - if user_signed_in? && current_user.author_of?(answer)
       p= link_to 'Edit', '', class: 'edit-answer-link', data: { answer_id: answer.id }
       br
-      p= link_to 'Delete', question_answer_path(@question,answer), method: :delete
+      p= link_to 'Delete', question_answer_path(@question,answer), method: :delete, remote: true
       br
 
     p
