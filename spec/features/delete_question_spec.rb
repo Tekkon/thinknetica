@@ -14,7 +14,7 @@ feature 'User can delete his question', %q{
 
     question
     visit questions_path
-    click_on 'Delete this question'
+    click_on 'Delete'
 
     expect(page).to_not have_content question.title
     expect(page).to_not have_content question.body

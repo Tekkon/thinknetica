@@ -1,8 +1,11 @@
-$('#answer-<%= @answer.id %>').html('<%= j render @answer %>');
-//$('.errors').html('<%= j render 'shared/error_messages', target: @answer %>');
-$('.edit-answer-link').click(function(e) {
-    e.preventDefault();
-    $(this).hide();
-    answer_id = $(this).data('answerId');
-    $('form#edit-answer-' + answer_id).show();
-});
+<% if @answer.errors.present? %>
+  $('#answer-<%= @answer.id %>-errors').html('<%= j render 'shared/error_messages', target: @answer %>');
+<% else %>
+  $('#answer-<%= @answer.id %>').html('<%= j render @answer %>');
+  $('.edit-answer-link').click(function(e) {
+      e.preventDefault();
+      $(this).hide();
+      answer_id = $(this).data('answerId');
+      $('form#edit-answer-' + answer_id).show();
+  });
+<% end %>

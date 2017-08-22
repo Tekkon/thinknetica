@@ -89,6 +89,12 @@ RSpec.describe AnswersController, type: :controller do
       expect(answer.body).to eq 'new body'
     end
 
+    it 'not changes answer if attributes is invalid' do
+      patch :update, id: answer, question_id: question, answer: { body: nil }, format: :js
+      answer.reload
+      expect(answer.body).to include 'I really want to know!'
+    end
+
     it 'renders update template' do
       patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
       expect(response).to render_template :update

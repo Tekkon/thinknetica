@@ -41,6 +41,17 @@ feature 'Answer editing', %q{
         expect(page).to_not have_selector 'textarea'
       end
     end
+
+    scenario 'tries to edit his answer with invalid parameters', js: true do
+      click_on 'Edit'
+
+      within '.answers' do
+        fill_in 'Answer', with: nil
+        click_on 'Save'
+
+        expect(page).to have_content "Body can't be blank"
+      end
+    end
   end
 
   describe 'Not author' do

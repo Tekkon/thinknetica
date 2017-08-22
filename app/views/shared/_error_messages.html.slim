@@ -1,4 +1,4 @@
-- if target.errors
+- if target.errors.present?
   - target.errors.full_messages.each do |msg|
     p= msg
     br

@@ -1,10 +1,6 @@
 h1 Question list
 
-- @questions.each do |q|
-  p= q.title
-  p= q.body
-  - if user_signed_in? && current_user.author_of?(q)
-    p= link_to 'Delete this question', question_path(q), method: :delete
+= render @questions
 
-p=
-p= link_to 'Ask question', new_question_path
+br
+=p link_to 'Ask question', new_question_path
