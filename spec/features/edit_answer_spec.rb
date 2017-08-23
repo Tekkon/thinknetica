@@ -10,6 +10,8 @@ feature 'Answer editing', %q{
   given(:another_user) { create(:user) }
   given!(:question) { create(:question, user: user) }
   given!(:answer) { create(:answer, question: question, user: user) }
+  given!(:second_answer) { create(:answer, question: question, user: user) }
+  given!(:others_answer) { create(:answer, question: question, user: another_user) }
 
   scenario 'Unauthenticated user tries to edit the answer' do
     visit question_path question
@@ -17,7 +19,7 @@ feature 'Answer editing', %q{
     expect(page).to_not have_link 'Edit'
   end
 
-  describe 'Author' do
+  describe "Answer's Author" do
     before do
       sign_in user
       visit question_path question
@@ -30,9 +32,8 @@ feature 'Answer editing', %q{
     end
 
     scenario 'tries to edit his answer', js: true do
-      click_on 'Edit'
-
-      within '.answers' do
+      within "#answer-#{answer.id}" do
+        click_on 'Edit'
         fill_in 'Answer', with: 'edited answer'
         click_on 'Save'
 
@@ -43,9 +44,8 @@ feature 'Answer editing', %q{
     end
 
     scenario 'tries to edit his answer with invalid parameters', js: true do
-      click_on 'Edit'
-
-      within '.answers' do
+      within "#answer-#{answer.id}" do
+        click_on 'Edit'
         fill_in 'Answer', with: nil
         click_on 'Save'
 
@@ -54,15 +54,78 @@ feature 'Answer editing', %q{
     end
   end
 
-  describe 'Not author' do
+  describe "Not answer's author" do
     before do
       sign_in another_user
       visit question_path question
     end
 
     scenario "tries to edit other's answer" do
-      within '.answers' do
+      within "#answer-#{answer.id}" do
         expect(page).to_not have_link 'Edit'
+      end
+    end
+  end
+
+  describe "Question's author" do
+    before do
+      sign_in user
+      visit question_path question
+    end
+
+    scenario 'tries to choose the answer as a favorite', js: true do
+      within "#answer-#{answer.id}" do
+        click_on 'Edit'
+
+        check 'Favorite'
+        click_on 'Save'
+
+        expect(page).to have_content 'Favorite!'
+      end
+    end
+
+    scenario 'tries to choose two answers as a favorite', js: true do
+      within "#answer-#{answer.id}" do
+        click_on 'Edit'
+        check 'Favorite'
+        click_on 'Save'
+      end
+
+      within "#answer-#{second_answer.id}" do
+        click_on 'Edit'
+        check 'Favorite'
+        click_on 'Save'
+      end
+
+      within "#answer-#{answer.id}" do
+        expect(page).to_not have_content 'Favorite!'
+      end
+
+      within "#answer-#{second_answer.id}" do
+        expect(page).to have_content 'Favorite!'
+      end
+    end
+
+    scenario "tries to choose other's answer as a favorite", js: true do
+      within "#answer-#{others_answer.id}" do
+        click_on 'Edit'
+        check 'Favorite'
+        click_on 'Save'
+        expect(page).to have_content 'Favorite!'
+      end
+    end
+  end
+
+  describe "Not question's author" do
+    before do
+      sign_in another_user
+      visit question_path question
+    end
+
+    scenario 'tries to choose the answer as a favorite', js: true do
+      within "#answer-#{others_answer.id}" do
+        click_on 'Edit'
+        expect(page).to_not have_content 'Favorite'
       end
     end
   end

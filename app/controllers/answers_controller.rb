@@ -25,12 +25,18 @@ class AnswersController < ApplicationController
     @answer = Answer.find(params[:id])
     @answer.update(answer_params)
     @question = @answer.question
+
+    if @answer.favorite
+      @question.answers.where("id != #{@answer.id}").each do |a|
+        a.update(favorite: false)
+      end
+    end
   end
 
   private
 
   def answer_params
-    params.require(:answer).permit(:body)
+    params.require(:answer).permit(:body, :favorite)
   end
 
   def find_question

@@ -94,5 +94,22 @@ RSpec.describe AnswersController, type: :controller do
       patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
       expect(response).to render_template :update
     end
+
+    it 'assigns requested answer as a favorite' do
+      patch :update, id: answer, question_id: question, answer: { body: 'new body', favorite: true }, format: :js
+      answer.reload
+      expect(answer.favorite).to eq true
+    end
+
+    it 'assigns only one answer as a favorite' do
+      another_answer = create(:answer, question: question, user: user, favorite: true)
+
+      patch :update, id: answer, question_id: question, answer: { body: 'new body', favorite: true }, format: :js
+      answer.reload
+      another_answer.reload
+
+      expect(answer.favorite).to eq true
+      expect(another_answer.favorite).to eq false
+    end
   end
 end
