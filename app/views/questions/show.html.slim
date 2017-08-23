@@ -5,7 +5,7 @@ p= @question.body
 
 .answers
   h2 Answers
-  = render @question.answers
+  = render @question.answers.sort_by { |a| a.favorite ? 0 : 1 }
 
 - if user_signed_in?
   h2 Add an answer

@@ -76,7 +76,6 @@ feature 'Answer editing', %q{
     scenario 'tries to choose the answer as a favorite', js: true do
       within "#answer-#{answer.id}" do
         click_on 'Edit'
-
         check 'Favorite'
         click_on 'Save'
 
