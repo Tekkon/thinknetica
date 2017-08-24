@@ -13,7 +13,7 @@ feature 'User can create an answer on the question page', %q{
     sign_in(user)
     visit question_path question
 
-    fill_in 'create-answer-body', with: 'This is my answer.'
+    fill_in 'Body', with: 'This is my answer.'
     click_on 'Create an answer'
 
     expect(current_path).to eq question_path(question)
