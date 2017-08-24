@@ -30,18 +30,23 @@ class AnswersController < ApplicationController
     else
       flash[:notice] = 'You can update only your answers.'
     end
+  end
 
-    if @answer.favorite
-      @question.answers.where("id != #{@answer.id}").each do |a|
-        a.update(favorite: false)
-      end
+  def mark_favorite
+    @answer = Answer.find(params[:id])
+    @question = @answer.question
+
+    if current_user.author_of?(@question)
+      @answer.mark_favorite
+    else
+      flash[:notice] = 'Only the author of the question can choose favorite answer.'
     end
   end
 
   private
 
   def answer_params
-    params.require(:answer).permit(:body, :favorite)
+    params.require(:answer).permit(:body)
   end
 
   def find_question
