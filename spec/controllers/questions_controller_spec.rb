@@ -93,7 +93,10 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'PATCH #update' do
-    sign_in_user
+    let(:another_user) { create(:user) }
+    let(:another_question) { create(:question, user: user) }
+
+    before { sign_in_the_user(user) }
 
     it 'assigns requested question to @question' do
       patch :update, id: question, question: attributes_for(:question), format: :js
@@ -109,6 +112,13 @@ RSpec.describe QuestionsController, type: :controller do
 
     it 'not changes question if attributes is invalid' do
       patch :update, id: question, question: { title: nil, body: nil }, format: :js
+      question.reload
+      expect(question.title).to include 'What happened write after the big bang?'
+      expect(question.body).to include 'I really want to know!'
+    end
+
+    it 'not changes question if user is not the author of the question' do
+      patch :update, id: another_question, question: { title: 'new title', body: 'new body' }, format: :js
       question.reload
       expect(question.title).to include 'What happened write after the big bang?'
       expect(question.body).to include 'I really want to know!'

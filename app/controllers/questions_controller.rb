@@ -30,7 +30,11 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    @question.update(question_params)
+    if current_user.author_of?(@question)
+      @question.update(question_params)
+    else
+      flash[:notice] = 'You can update only your questions'
+    end
   end
 
   def destroy
@@ -38,7 +42,7 @@ class QuestionsController < ApplicationController
       @question.destroy
       flash[:notice] = 'Your question is deleted successfully.'
     else
-      flash[:notice] = 'You can delete only yours questions.'
+      flash[:notice] = 'You can delete only your questions.'
     end
 
     redirect_to questions_path
