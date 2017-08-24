@@ -66,7 +66,10 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'PATCH #update' do
-    sign_in_user
+    let(:another_user) { create(:user) }
+    let(:another_answer) { create(:answer, user: another_user, question: question) }
+
+    before { sign_in_the_user user }
 
     it 'assigns requested answer to @answer' do
       patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
@@ -86,6 +89,12 @@ RSpec.describe AnswersController, type: :controller do
 
     it 'not changes answer if attributes is invalid' do
       patch :update, id: answer, question_id: question, answer: { body: nil }, format: :js
+      answer.reload
+      expect(answer.body).to include 'I really want to know!'
+    end
+
+    it 'not changes answer if user is not the author of the answer' do
+      patch :update, id: another_answer, question_id: question, answer: { body: 'new body' }, format: :js
       answer.reload
       expect(answer.body).to include 'I really want to know!'
     end

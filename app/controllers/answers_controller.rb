@@ -23,8 +23,13 @@ class AnswersController < ApplicationController
 
   def update
     @answer = Answer.find(params[:id])
-    @answer.update(answer_params)
     @question = @answer.question
+
+    if current_user.author_of?(@answer)
+      @answer.update(answer_params)
+    else
+      flash[:notice] = 'You can update only your answers.'
+    end
 
     if @answer.favorite
       @question.answers.where("id != #{@answer.id}").each do |a|
