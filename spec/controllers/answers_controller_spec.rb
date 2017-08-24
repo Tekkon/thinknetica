@@ -66,37 +66,42 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'PATCH #update' do
+    sign_in_user
     let(:another_user) { create(:user) }
     let(:another_answer) { create(:answer, user: another_user, question: question) }
 
-    before { sign_in_the_user user }
+    context "Answer's author" do
+      before { sign_in_the_user user }
 
-    it 'assigns requested answer to @answer' do
-      patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
-      expect(assigns(:answer)).to eq answer
+      it 'assigns requested answer to @answer' do
+        patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
+        expect(assigns(:answer)).to eq answer
+      end
+
+      it 'assignes the question' do
+        patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
+        expect(assigns(:question)).to eq question
+      end
+
+      it 'changes answer attributes' do
+        patch :update, id: answer, question_id: question, answer: { body: 'new body' }, format: :js
+        answer.reload
+        expect(answer.body).to eq 'new body'
+      end
+
+      it 'not changes answer if attributes is invalid' do
+        patch :update, id: answer, question_id: question, answer: { body: nil }, format: :js
+        answer.reload
+        expect(answer.body).to include 'I really want to know!'
+      end
     end
 
-    it 'assignes the question' do
-      patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
-      expect(assigns(:question)).to eq question
-    end
-
-    it 'changes answer attributes' do
-      patch :update, id: answer, question_id: question, answer: { body: 'new body' }, format: :js
-      answer.reload
-      expect(answer.body).to eq 'new body'
-    end
-
-    it 'not changes answer if attributes is invalid' do
-      patch :update, id: answer, question_id: question, answer: { body: nil }, format: :js
-      answer.reload
-      expect(answer.body).to include 'I really want to know!'
-    end
-
-    it 'not changes answer if user is not the author of the answer' do
-      patch :update, id: another_answer, question_id: question, answer: { body: 'new body' }, format: :js
-      answer.reload
-      expect(answer.body).to include 'I really want to know!'
+    context "Not answer's author" do
+      it 'not changes answer' do
+        patch :update, id: another_answer, question_id: question, answer: { body: 'new body' }, format: :js
+        answer.reload
+        expect(answer.body).to include 'I really want to know!'
+      end
     end
 
     it 'renders update template' do
@@ -106,12 +111,11 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'PUT #mark_favorite' do
+    sign_in_user
     let!(:another_answer) { create(:answer, question: question, user: user, favorite: true) }
 
     context "Question's author" do
-      before do
-        sign_in_the_user user
-      end
+      before { sign_in_the_user user }
 
       it 'assigns requested answer as a favorite' do
         put :mark_favorite, answer_id: answer, question_id: question, format: :js
@@ -127,6 +131,11 @@ RSpec.describe AnswersController, type: :controller do
         expect(answer.favorite).to eq true
         expect(another_answer.favorite).to eq false
       end
+
+      it 'renders mark_favorite template' do
+        put :mark_favorite, answer_id: answer, question_id: question, format: :js
+        expect(response).to render_template :mark_favorite
+      end
     end
 
     context "Not question's author" do
@@ -135,6 +144,11 @@ RSpec.describe AnswersController, type: :controller do
         answer.reload
         expect(answer.favorite).to eq false
       end
+    end
+
+    it 'renders mark_favorite template' do
+      put :mark_favorite, answer_id: answer, question_id: question, format: :js
+      expect(response).to render_template :mark_favorite
     end
   end
 end
