@@ -103,22 +103,38 @@ RSpec.describe AnswersController, type: :controller do
       patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
       expect(response).to render_template :update
     end
+  end
 
-    it 'assigns requested answer as a favorite' do
-      patch :update, id: answer, question_id: question, answer: { body: 'new body', favorite: true }, format: :js
-      answer.reload
-      expect(answer.favorite).to eq true
+  describe 'PUT #mark_favorite' do
+    let!(:another_answer) { create(:answer, question: question, user: user, favorite: true) }
+
+    context "Question's author" do
+      before do
+        sign_in_the_user user
+      end
+
+      it 'assigns requested answer as a favorite' do
+        put :mark_favorite, answer_id: answer, question_id: question, format: :js
+        answer.reload
+        expect(answer.favorite).to eq true
+      end
+
+      it 'assigns only one answer as a favorite' do
+        put :mark_favorite, answer_id: answer, question_id: question, format: :js
+        answer.reload
+        another_answer.reload
+
+        expect(answer.favorite).to eq true
+        expect(another_answer.favorite).to eq false
+      end
     end
 
-    it 'assigns only one answer as a favorite' do
-      another_answer = create(:answer, question: question, user: user, favorite: true)
-
-      patch :update, id: answer, question_id: question, answer: { body: 'new body', favorite: true }, format: :js
-      answer.reload
-      another_answer.reload
-
-      expect(answer.favorite).to eq true
-      expect(another_answer.favorite).to eq false
+    context "Not question's author" do
+      it 'not assigns requested answer as a favorite' do
+        put :mark_favorite, answer_id: answer, question_id: question, format: :js
+        answer.reload
+        expect(answer.favorite).to eq false
+      end
     end
   end
 end

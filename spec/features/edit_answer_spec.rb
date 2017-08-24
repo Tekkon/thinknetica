@@ -10,8 +10,6 @@ feature 'Answer editing', %q{
   given(:another_user) { create(:user) }
   given!(:question) { create(:question, user: user) }
   given!(:answer) { create(:answer, question: question, user: user) }
-  given!(:second_answer) { create(:answer, question: question, user: user) }
-  given!(:others_answer) { create(:answer, question: question, user: another_user) }
 
   scenario 'Unauthenticated user tries to edit the answer' do
     visit question_path question
@@ -63,68 +61,6 @@ feature 'Answer editing', %q{
     scenario "tries to edit other's answer" do
       within "#answer-#{answer.id}" do
         expect(page).to_not have_link 'Edit'
-      end
-    end
-  end
-
-  describe "Question's author" do
-    before do
-      sign_in user
-      visit question_path question
-    end
-
-    scenario 'tries to choose the answer as a favorite', js: true do
-      within "#answer-#{answer.id}" do
-        click_on 'Edit'
-        check 'Favorite'
-        click_on 'Save'
-
-        expect(page).to have_content 'Favorite!'
-      end
-    end
-
-    scenario 'tries to choose two answers as a favorite', js: true do
-      within "#answer-#{answer.id}" do
-        click_on 'Edit'
-        check 'Favorite'
-        click_on 'Save'
-      end
-
-      within "#answer-#{second_answer.id}" do
-        click_on 'Edit'
-        check 'Favorite'
-        click_on 'Save'
-      end
-
-      within "#answer-#{answer.id}" do
-        expect(page).to_not have_content 'Favorite!'
-      end
-
-      within "#answer-#{second_answer.id}" do
-        expect(page).to have_content 'Favorite!'
-      end
-    end
-
-    scenario "tries to choose other's answer as a favorite", js: true do
-      within "#answer-#{others_answer.id}" do
-        click_on 'Edit'
-        check 'Favorite'
-        click_on 'Save'
-        expect(page).to have_content 'Favorite!'
-      end
-    end
-  end
-
-  describe "Not question's author" do
-    before do
-      sign_in another_user
-      visit question_path question
-    end
-
-    scenario 'tries to choose the answer as a favorite', js: true do
-      within "#answer-#{others_answer.id}" do
-        click_on 'Edit'
-        expect(page).to_not have_content 'Favorite'
       end
     end
   end
