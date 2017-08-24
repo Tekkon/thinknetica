@@ -1,24 +1,23 @@
 - if answer.persisted?
   div id="answer-#{answer.id}"
     p= answer.body
-    - if answer.favorite
-      p= 'Favorite!'
-    - if user_signed_in? && (current_user.author_of?(answer) || current_user.author_of?(answer.question))
-      p= link_to 'Edit', '', class: 'edit-answer-link', data: { answer_id: answer.id }
+
+    - if user_signed_in? && current_user.author_of?(@question)
+      = label :favorite, 'Favorite'
+      = radio_button 'rb', 'favorite', "answer_#{answer.id}", checked: answer.favorite, class: 'favorite-check', data: { remote: true, method: :put,
+              url: "/questions/#{@question.id}/answers/#{answer.id}/mark-favorite" }
       br
+
     - if user_signed_in? && current_user.author_of?(answer)
-      p= link_to 'Delete', question_answer_path(@question,answer), method: :delete, remote: true
+      = link_to 'Edit', '', class: 'edit-answer-link', data: { answer_id: answer.id }
+      br
+      = link_to 'Delete', question_answer_path(@question,answer), method: :delete, remote: true
       br
 
       = form_for [@question, answer], remote: true, html: { id: "edit-answer-#{answer.id}" } do |f|
         div id="answer-#{answer.id}-errors"
           = render "shared/error_messages", target: answer
-        - if user_signed_in? && current_user.author_of?(answer)
           = f.label :body, "Answer"
           = f.text_area :body
-        - if user_signed_in? && current_user.author_of?(answer.question)
           br
-          = f.label :favorite
-          = f.check_box :favorite
-        br
-        = f.submit 'Save'
+          = f.submit 'Save'
