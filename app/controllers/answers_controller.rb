@@ -33,7 +33,7 @@ class AnswersController < ApplicationController
   end
 
   def mark_favorite
-    @answer = Answer.find(params[:id])
+    @answer = Answer.find(params[:answer_id])
     @question = @answer.question
 
     if current_user.author_of?(@question)
