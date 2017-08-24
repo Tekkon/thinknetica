@@ -1,8 +1,7 @@
 <% if @answer.errors.present? %>
   $('#answer-<%= @answer.id %>-errors').html('<%= j render 'shared/error_messages', target: @answer %>');
 <% else %>
-  //$('#answer-<%= @answer.id %>').html('<%= j render @answer %>');
-  $('.answers').html('<%= j render @question.answers.sort_by { |a| a.favorite ? 0 : 1 } %>')
+  $('#answer-<%= @answer.id %>').html('<%= j render @answer %>');
   $('.edit-answer-link').click(function(e) {
       e.preventDefault();
       $(this).hide();
