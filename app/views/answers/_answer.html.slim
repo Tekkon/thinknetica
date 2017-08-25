@@ -2,6 +2,11 @@
   div id="answer-#{answer.id}"
     p= answer.body
 
+    p Attachments:
+    ul
+      - answer.attachments.each do |a|
+        li= link_to a.file.identifier, a.file.url
+
     - if user_signed_in? && current_user.author_of?(@question)
       = label :favorite, 'Favorite'
       = radio_button 'rb', 'favorite', "answer_#{answer.id}", checked: answer.favorite, class: 'favorite-check', data: { remote: true, method: :put,

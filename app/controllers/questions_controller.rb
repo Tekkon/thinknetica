@@ -8,6 +8,7 @@ class QuestionsController < ApplicationController
 
   def show
     @answer = @question.answers.build
+    @answer.attachments.build
   end
 
   def new
@@ -22,7 +23,7 @@ class QuestionsController < ApplicationController
     @question = Question.new(question_params)
     @question.user = current_user
     @question.attachments.each do |a|
-      a.question = @question
+      a.attachmentable = @question
     end
 
     if @question.save
