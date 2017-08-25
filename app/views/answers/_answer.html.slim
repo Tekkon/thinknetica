@@ -1,16 +1,23 @@
 - if answer.persisted?
   div id="answer-#{answer.id}"
     p= answer.body
-    - if user_signed_in? && current_user.author_of?(answer)
-      - if user_signed_in?
-        p= link_to 'Edit', '', class: 'edit-answer-link', data: { answer_id: answer.id }
-      p= link_to 'Delete this answer', question_answer_path(@question,answer), method: :delete
+
+    - if user_signed_in? && current_user.author_of?(@question)
+      = label :favorite, 'Favorite'
+      = radio_button 'rb', 'favorite', "answer_#{answer.id}", checked: answer.favorite, class: 'favorite-check', data: { remote: true, method: :put,
+              url: mark_favorite_question_answer_path(@question, answer) }
       br
 
-    p
+    - if user_signed_in? && current_user.author_of?(answer)
+      = link_to 'Edit', '', class: 'edit-answer-link', data: { answer_id: answer.id }
+      br
+      = link_to 'Delete', question_answer_path(@question,answer), method: :delete, remote: true
+      br
+
       = form_for [@question, answer], remote: true, html: { id: "edit-answer-#{answer.id}" } do |f|
-        .errors
+        div id="answer-#{answer.id}-errors"
           = render "shared/error_messages", target: answer
-        = f.label :body, "Answer"
-        = f.text_area :body
-        = f.submit 'Save'
+          = f.label :body, "Answer"
+          = f.text_area :body
+          br
+          = f.submit 'Save'

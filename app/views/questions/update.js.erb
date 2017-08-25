@@ -1,0 +1,11 @@
+<% if @question.errors.present? %>
+  $('#question-<%= @question.id %>-errors').html('<%= j render 'shared/error_messages', target: @question %>');
+<% else %>
+  $('#question-<%= @question.id %>').html('<%= j render @question %>');
+  $('.edit-question-link').click(function(e) {
+      e.preventDefault();
+      $(this).hide();
+      question_id = $(this).data('questionId');
+      $('form#edit-question-' + question_id).show();
+  });
+<% end %>

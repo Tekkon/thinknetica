@@ -1,0 +1,20 @@
+- if question.persisted?
+  div id="question-#{question.id}"
+    p= question.title
+    p= question.body
+    - if user_signed_in? && current_user.author_of?(question)
+      = link_to 'Edit', '', class: 'edit-question-link', data: {question_id: question.id}
+      br
+      = link_to 'Delete', question_path(question), method: :delete
+      br
+
+      = form_for question, remote: true, html: {id: "edit-question-#{question.id}"} do |f|
+        div id="question-#{question.id}-errors"
+          = render "shared/error_messages", target: question
+        = f.label :title
+        = f.text_field :title
+        br
+        = f.label :body, "Question"
+        = f.text_area :body
+        br
+        = f.submit 'Save'

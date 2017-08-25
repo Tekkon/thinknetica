@@ -93,39 +93,40 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'PATCH #update' do
-    sign_in_user
+    let(:another_user) { create(:user) }
+    let(:another_question) { create(:question, user: another_user) }
 
-    context 'valid attrbutes' do
-      it 'assigns the requested question to @question' do
-        patch :update, params: { id: question, question: attributes_for(:question) }
-        expect(assigns(:question)).to eq question
-      end
+    before { sign_in_the_user(user) }
 
-      it 'changes question attributes' do
-        patch :update, params: { id: question, question: { title: 'new title', body: 'new body' } }
-        question.reload
-        expect(question.title).to eq 'new title'
-        expect(question.body).to eq 'new body'
-      end
-
-      it 'redirects to the updated question' do
-        patch :update, params: { id: question, question: attributes_for(:question) }
-        expect(response).to redirect_to question
-      end
+    it 'assigns requested question to @question' do
+      patch :update, id: question, question: attributes_for(:question), format: :js
+      expect(assigns(:question)).to eq question
     end
 
-    context 'invalid attributes' do
-      before { patch :update, params: { id: question, question: { title: 'new title', body: nil } } }
+    it 'changes question attributes' do
+      patch :update, id: question, question: { title: 'new title', body: 'new body' }, format: :js
+      question.reload
+      expect(question.title).to eq 'new title'
+      expect(question.body).to eq 'new body'
+    end
 
-      it 'does not change question attributes' do
-        question.reload
-        expect(question.title).to include 'What happened write after the big bang?'
-        expect(question.body).to include 'I really want to know!'
-      end
+    it 'not changes question if attributes is invalid' do
+      patch :update, id: question, question: { title: nil, body: nil }, format: :js
+      question.reload
+      expect(question.title).to include 'What happened write after the big bang?'
+      expect(question.body).to include 'I really want to know!'
+    end
 
-      it 're-renders edit view' do
-        expect(response).to render_template :edit
-      end
+    it 'not changes question if user is not the author of the question' do
+      patch :update, id: another_question, question: { title: 'new title', body: 'new body' }, format: :js
+      question.reload
+      expect(another_question.title).to include 'What happened write after the big bang?'
+      expect(another_question.body).to include 'I really want to know!'
+    end
+
+    it 'renders update template' do
+      patch :update, id: question, question: attributes_for(:question), format: :js
+      expect(response).to render_template :update
     end
   end
 

@@ -1,4 +1,4 @@
-require_relative 'features_helper'
+require_relative '../features_helper'
 
 feature 'User can delete his question', %q{
   In order to delete a question
@@ -14,7 +14,7 @@ feature 'User can delete his question', %q{
 
     question
     visit questions_path
-    click_on 'Delete this question'
+    click_on 'Delete'
 
     expect(page).to_not have_content question.title
     expect(page).to_not have_content question.body
@@ -27,13 +27,13 @@ feature 'User can delete his question', %q{
     another_user = create(:user)
     create(:question, user_id: another_user.id)
     visit questions_path
-    expect(page).to_not have_content 'Delete this question'
+    expect(page).to_not have_content 'Delete'
   end
 
   scenario 'Non-authenticated user tries to delete a question' do
     create(:question, user_id: user.id)
     visit questions_path
-    expect(page).to_not have_content 'Delete this question'
+    expect(page).to_not have_content 'Delete'
   end
 
 end

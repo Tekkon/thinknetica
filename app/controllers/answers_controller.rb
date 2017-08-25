@@ -16,17 +16,31 @@ class AnswersController < ApplicationController
     if current_user.author_of?(@answer)
       @answer.destroy
       flash[:notice] = 'Your answer is deleted successfully.'
-      redirect_to question_path(@answer.question)
     else
       flash[:notice] = 'You can delete only yours answers.'
-      render 'questions/show'
     end
   end
 
   def update
     @answer = Answer.find(params[:id])
-    @answer.update(answer_params)
     @question = @answer.question
+
+    if current_user.author_of?(@answer)
+      @answer.update(answer_params)
+    else
+      flash[:notice] = 'You can update only your answers.'
+    end
+  end
+
+  def mark_favorite
+    @answer = Answer.find(params[:id])
+    @question = @answer.question
+
+    if current_user.author_of?(@question)
+      @answer.mark_favorite
+    else
+      flash[:notice] = 'Only the author of the question can choose favorite answer.'
+    end
   end
 
   private
