@@ -22,6 +22,7 @@ feature 'Choosing favorite answer', %q{
     scenario 'tries to choose his answer as a favorite', js: true do
       within "#answer-#{answer.id}" do
         choose "rb[favorite]"
+        wait_for_ajax
         expect(find_field("rb[favorite]")).to be_checked
       end
     end
@@ -29,6 +30,7 @@ feature 'Choosing favorite answer', %q{
     scenario "tries to choose other's answer as a favorite", js: true do
       within "#answer-#{others_answer.id}" do
         choose "rb[favorite]"
+        wait_for_ajax
         expect(find_field("rb[favorite]")).to be_checked
       end
     end
@@ -38,9 +40,13 @@ feature 'Choosing favorite answer', %q{
         choose "rb[favorite]"
       end
 
+      wait_for_ajax
+
       within "#answer-#{second_answer.id}" do
         choose "rb[favorite]"
       end
+
+      wait_for_ajax
 
       within "#answer-#{answer.id}" do
         expect(find_field("rb[favorite]")).to_not be_checked
@@ -49,8 +55,6 @@ feature 'Choosing favorite answer', %q{
       within "#answer-#{second_answer.id}" do
         expect(find_field("rb[favorite]" )).to be_checked
       end
-
-      sleep(1)
 
       expect(second_answer.body).to appear_before(answer.body)
       expect(second_answer.body).to appear_before(others_answer.body)

@@ -5,6 +5,7 @@ RSpec.configure do |config|
   Capybara.default_wait_time = 5
 
   config.include FeaturesMacros, type: :feature
+  config.include WaitForAjax, type: :feature
   config.use_transactional_fixtures = false
 
   config.before(:suite) do
