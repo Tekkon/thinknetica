@@ -118,13 +118,13 @@ RSpec.describe AnswersController, type: :controller do
       before { sign_in_the_user user }
 
       it 'assigns requested answer as a favorite' do
-        put :mark_favorite, answer_id: answer, question_id: question, format: :js
+        put :mark_favorite, id: answer, question_id: question, format: :js
         answer.reload
         expect(answer.favorite).to eq true
       end
 
       it 'assigns only one answer as a favorite' do
-        put :mark_favorite, answer_id: answer, question_id: question, format: :js
+        put :mark_favorite, id: answer, question_id: question, format: :js
         answer.reload
         another_answer.reload
 
@@ -133,21 +133,21 @@ RSpec.describe AnswersController, type: :controller do
       end
 
       it 'renders mark_favorite template' do
-        put :mark_favorite, answer_id: answer, question_id: question, format: :js
+        put :mark_favorite, id: answer, question_id: question, format: :js
         expect(response).to render_template :mark_favorite
       end
     end
 
     context "Not question's author" do
       it 'not assigns requested answer as a favorite' do
-        put :mark_favorite, answer_id: answer, question_id: question, format: :js
+        put :mark_favorite, id: answer, question_id: question, format: :js
         answer.reload
         expect(answer.favorite).to eq false
       end
     end
 
     it 'renders mark_favorite template' do
-      put :mark_favorite, answer_id: answer, question_id: question, format: :js
+      put :mark_favorite, id: answer, question_id: question, format: :js
       expect(response).to render_template :mark_favorite
     end
   end
