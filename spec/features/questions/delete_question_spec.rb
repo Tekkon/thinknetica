@@ -1,4 +1,4 @@
-require_relative 'features_helper'
+require_relative '../features_helper'
 
 feature 'User can delete his question', %q{
   In order to delete a question
