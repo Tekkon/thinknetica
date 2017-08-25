@@ -1,0 +1,24 @@
+require_relative '../features_helper'
+
+feature 'Add files to question', %q{
+  In order to illustrate my question
+  As an question's author
+  I'd like to be able to attach files
+} do
+
+  given(:user) { create(:user) }
+
+  background do
+    sign_in(user)
+    visit new_question_path
+  end
+
+  scenario 'User adds file when asks the question' do
+    fill_in 'Title', with: nil
+    fill_in 'Body', with: nil
+    attach_file 'File', "#{Rails.root}/spec/spec_helper.rb"
+    click_on 'Create'
+
+    epect(page).to have_content 'spec_helper.rb'
+  end
+end
