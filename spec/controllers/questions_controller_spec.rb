@@ -94,7 +94,7 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'PATCH #update' do
     let(:another_user) { create(:user) }
-    let(:another_question) { create(:question, user: user) }
+    let(:another_question) { create(:question, user: another_user) }
 
     before { sign_in_the_user(user) }
 
@@ -120,8 +120,8 @@ RSpec.describe QuestionsController, type: :controller do
     it 'not changes question if user is not the author of the question' do
       patch :update, id: another_question, question: { title: 'new title', body: 'new body' }, format: :js
       question.reload
-      expect(question.title).to include 'What happened write after the big bang?'
-      expect(question.body).to include 'I really want to know!'
+      expect(another_question.title).to include 'What happened write after the big bang?'
+      expect(another_question.body).to include 'I really want to know!'
     end
 
     it 'renders update template' do
