@@ -8,8 +8,11 @@ class Answer < ApplicationRecord
 
   def mark_favorite
     ActiveRecord::Base.transaction do
+      question.answers.where("id != #{self.id}").each do |a|
+        a.update!(favorite: false)
+      end
+
       self.update!(favorite: true)
-      self.question.unmark_favorites(self)
     end
   end
 end
