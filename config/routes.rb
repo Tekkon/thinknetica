@@ -4,7 +4,7 @@ Rails.application.routes.draw do
 
   resources :questions do
     resources :answers do
-      put '/mark-favorite' => 'answers#mark_favorite'
+      put :mark_favorite, on: :member
     end
   end
 end
