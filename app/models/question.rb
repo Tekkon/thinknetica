@@ -6,7 +6,7 @@ class Question < ApplicationRecord
 
   def unmark_favorites(answer)
     self.answers.where("id != #{answer.id}").each do |a|
-      a.update(favorite: false)
+      a.update!(favorite: false)
     end
   end
 end
