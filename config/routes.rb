@@ -7,4 +7,6 @@ Rails.application.routes.draw do
       put :mark_favorite, on: :member
     end
   end
+
+  resources :attachments
 end

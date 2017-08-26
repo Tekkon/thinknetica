@@ -3,9 +3,14 @@
     p= answer.body
 
     p Attachments:
-    ul
-      - answer.attachments.each do |a|
-        li= link_to a.file.identifier, a.file.url
+    div id="answer-#{answer.id}-attachments"
+      ul
+        - answer.attachments.each do |a|
+          li id="attachment-#{a.id}"
+            = link_to a.file.identifier, a.file.url
+            br
+            - if current_user.author_of?(answer)
+              = link_to 'remove', attachment_path(a), data: {remote: true, method: :delete}
 
     - if user_signed_in? && current_user.author_of?(@question)
       = label :favorite, 'Favorite'
