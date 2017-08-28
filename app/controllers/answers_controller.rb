@@ -7,9 +7,6 @@ class AnswersController < ApplicationController
   def create
     @answer = @question.answers.new(answer_params)
     @answer.user = current_user
-    @answer.attachments.each do |a|
-      a.attachmentable = @answer
-    end
 
     @answer.save
   end

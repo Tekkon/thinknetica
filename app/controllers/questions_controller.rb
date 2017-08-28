@@ -22,9 +22,6 @@ class QuestionsController < ApplicationController
   def create
     @question = Question.new(question_params)
     @question.user = current_user
-    @question.attachments.each do |a|
-      a.attachmentable = @question
-    end
 
     if @question.save
       flash[:notice] = 'Your question is created successfully.'
