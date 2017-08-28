@@ -20,7 +20,7 @@ feature 'Add files to answer', %q{
     click_on 'Create'
 
     within '.answers' do
-      expect(page).to have_link 'spec_helper.rb', 'uploads/attachemnt/file/1/spec_helper.rb'
+      expect(page).to have_link 'spec_helper.rb', 'uploads/attachment/file/1/spec_helper.rb'
     end
   end
 
@@ -36,8 +36,8 @@ feature 'Add files to answer', %q{
     click_on 'Create'
 
     within '.answers' do
-      expect(page).to have_link 'spec_helper.rb', 'uploads/attachemnt/file/1/spec_helper.rb'
-      expect(page).to have_link 'rails_helper.rb', 'uploads/attachemnt/file/2/rails_helper.rb'
+      expect(page).to have_link 'spec_helper.rb', 'uploads/attachment/file/1/spec_helper.rb'
+      expect(page).to have_link 'rails_helper.rb', 'uploads/attachment/file/2/rails_helper.rb'
     end
   end
 end
