@@ -1,7 +1,17 @@
 = form_for @question do |f|
   = render "shared/error_messages", :target => @question
-  = f.label :title
-  = f.text_field :title
-  = f.label :body
-  = f.text_area :body
+  p
+    = f.label :title
+    = f.text_field :title
+  p
+    = f.label :body
+    = f.text_area :body
+
+  p Attachments:
+  p
+    = f.fields_for :attachments do |a|
+      = render 'attachment_fields', f: a
+    .links
+      = link_to_add_association 'add attachment', f, :attachments
+
   = f.submit 'Create'

@@ -2,6 +2,17 @@
   div id="answer-#{answer.id}"
     p= answer.body
 
+    p Attachments:
+    div id="answer-#{answer.id}-attachments"
+      ul
+        - answer.attachments.each do |a|
+          - if a.persisted?
+            li id="attachment-#{a.id}"
+              = link_to a.file.identifier, a.file.url
+              br
+              - if current_user.author_of?(answer)
+                = link_to 'remove', attachment_path(a), data: {remote: true, method: :delete}
+
     - if user_signed_in? && current_user.author_of?(@question)
       = label :favorite, 'Favorite'
       = radio_button 'rb', 'favorite', "answer_#{answer.id}", checked: answer.favorite, class: 'favorite-check', data: { remote: true, method: :put,
