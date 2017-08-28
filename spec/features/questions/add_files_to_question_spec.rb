@@ -13,7 +13,7 @@ feature 'Add files to question', %q{
     visit new_question_path
   end
 
-  scenario 'User adds file when asks the question' do
+  scenario 'User adds file when asks the question', js: true do
     fill_in 'Title', with: 'New question'
     fill_in 'Body', with: 'New question'
     attach_file 'File', "#{Rails.root}/spec/spec_helper.rb"
@@ -22,7 +22,7 @@ feature 'Add files to question', %q{
     expect(page).to have_link 'spec_helper.rb', 'uploads/attachment/file/1/spec_helper.rb'
   end
 
-  scenario 'User adds multiple files when asks the question' do
+  scenario 'User adds multiple files when asks the question', js: true do
     fill_in 'Title', with: 'New question'
     fill_in 'Body', with: 'New question'
     attach_file 'File', "#{Rails.root}/spec/spec_helper.rb"
