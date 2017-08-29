@@ -6,7 +6,10 @@ Rails.application.routes.draw do
     resources :answers do
       put :mark_favorite, on: :member
     end
+
+    #put 'vote/:value', to: 'questions#vote', as: 'vote', on: :member
   end
 
-  resources :attachments
+  resources :attachments, only: [:destroy]
+  resources :votes, only: [:create]
 end

@@ -1,7 +1,26 @@
 - if question.persisted?
   div id="question-#{question.id}"
-    p= question.title
-    p= question.body
+    p
+      = question.title
+      br
+      = question.body
+      br
+
+      div id="question-#{question.id}-vote"
+        - if user_signed_in?
+          - if !current_user.author_of?(question) && question.vote(current_user).nil?
+            = label "vote_question_#{question.id}", 'Vote for'
+            = radio_button 'rb', "vote_question_#{question.id}", "1", class: 'rb-vote', data: { remote: true, method: :post,
+                    url: votes_path({ votable_id: question.id, votable_type: 'Question', vote_type: '1'}) }
+            br
+            = label "vote_question_#{question.id}", 'Vote against'
+            = radio_button 'rb', "vote_question_#{question.id}", "0", class: 'rb-vote', data: { remote: true, method: :post,
+                    url: votes_path({ votable_id: question.id, votable_type: 'Question', vote_type: '-1'}) }
+
+      div id="question-#{question.id}-vote-result"
+        - unless question.vote(current_user).nil?
+          = question.vote_description(current_user)
+
     - if user_signed_in? && current_user.author_of?(question)
       = link_to 'Edit', '', class: 'edit-question-link', data: {question_id: question.id}
       br

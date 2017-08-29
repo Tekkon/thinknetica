@@ -6,8 +6,13 @@ class User < ApplicationRecord
 
   has_many :questions
   has_many :answers
+  has_many :votes
 
   def author_of?(object)
-    self.id == object.user_id
+    if object.present?
+      self.id == object.user_id
+    else
+      false
+    end
   end
 end
