@@ -1,6 +1,16 @@
 - if answer.persisted?
   div id="answer-#{answer.id}"
-    p= answer.body
+    = answer.body
+    br
+    = "Rating: #{answer.rating}"
+    br
+
+    - if user_signed_in?
+      div id="answer-#{answer.id}-vote"
+        = render 'shared/vote_buttons', votable: answer, votable_type: 'Answer'
+
+      div id="answer-#{answer.id}-vote-result"
+        = render 'shared/vote_result', votable: answer
 
     p Attachments:
     div id="answer-#{answer.id}-attachments"
