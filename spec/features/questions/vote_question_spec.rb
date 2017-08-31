@@ -43,8 +43,6 @@ feature 'Question voting', %q{
     end
 
     scenario 'can revote for or against question', js: true do
-      save_and_open_page
-
       within "#question-#{questions[1].id}" do
         click_on 'Revote'
         choose "rb_vote_question_#{questions[1].id}_1"
@@ -70,6 +68,18 @@ feature 'Question voting', %q{
       visit questions_path
       expect(page).to_not have_content 'Vote for'
       expect(page).to_not have_content 'Vote against'
+    end
+  end
+
+  scenario 'Any user sees the rating of the question' do
+    visit questions_path
+
+    within "#question-#{questions[0].id}" do
+      expect(page).to have_content('Rating')
+    end
+
+    within "#question-#{questions[1].id}" do
+      expect(page).to have_content('Rating')
     end
   end
 

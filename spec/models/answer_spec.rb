@@ -1,17 +1,17 @@
 require 'rails_helper'
+require_relative 'concerns/votable_spec.rb'
+require_relative 'concerns/attachmentable_spec.rb'
 
-RSpec.describe Answer, type: :model do  
+RSpec.describe Answer, type: :model do
+  it_behaves_like 'votable'
+  it_behaves_like 'attachmentable'
+
   it { should belong_to(:question) }
   it { should belong_to(:user) }
-  it { should have_many(:attachments) }
-  it { should have_many(:votes) }
 
   it { should validate_presence_of :body }
 
-  it { should accept_nested_attributes_for :attachments }
-  it { should accept_nested_attributes_for :votes }
-
-  context 'mark_favorite method' do
+  context '#mark_favorite' do
     let(:user) { create(:user) }
     let!(:question) { create(:question, user: user) }
     let!(:answer) { create(:answer, user: user, question: question) }

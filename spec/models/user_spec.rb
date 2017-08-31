@@ -7,7 +7,7 @@ RSpec.describe User, type: :model do
   it { should validate_presence_of :email }
   it { should validate_presence_of :password }
 
-  context 'author_of? method' do
+  context '#author_of?' do
     let(:user) { create(:user) }
     let(:another_user) { create(:user) }
     let(:question) { create(:question, user: user) }
