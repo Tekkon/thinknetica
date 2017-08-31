@@ -9,6 +9,7 @@ feature 'Question voting', %q{
   given(:user) { create(:user) }
   given(:another_user) { create(:user) }
   given!(:questions) { create_list(:question, 2, user: user) }
+  given!(:vote) { create(:vote, user: another_user, votable: questions[1], votable_type: 'Question', vote_type: 1) }
 
   context 'Not author of the question' do
     before do
@@ -21,14 +22,6 @@ feature 'Question voting', %q{
 
       within "#question-#{questions[0].id}" do
         expect(page).to have_content 'You have voted for this question.'
-        expect(page).to_not have_content 'Vote for'
-        expect(page).to_not have_content 'Vote against'
-      end
-
-      within "#question-#{questions[1].id}" do
-        expect(page).to_not have_content 'You have voted for this question.'
-        expect(page).to have_content 'Vote for'
-        expect(page).to have_content 'Vote against'
       end
     end
 
@@ -37,14 +30,25 @@ feature 'Question voting', %q{
 
       within "#question-#{questions[0].id}" do
         expect(page).to have_content 'You have voted against this question.'
+      end
+    end
+
+    scenario 'can vote for or against question only one time', js: true do
+      choose "rb_vote_question_#{questions[0].id}_1"
+
+      within "#question-#{questions[0].id}" do
         expect(page).to_not have_content 'Vote for'
         expect(page).to_not have_content 'Vote against'
       end
+    end
+
+    scenario 'can revote for or against question', js: true do
+      save_and_open_page
 
       within "#question-#{questions[1].id}" do
-        expect(page).to_not have_content 'You have voted for this question.'
-        expect(page).to have_content 'Vote for'
-        expect(page).to have_content 'Vote against'
+        click_on 'Revote'
+        choose "rb_vote_question_#{questions[1].id}_1"
+        expect(page).to have_content 'You have voted for this question.'
       end
     end
   end

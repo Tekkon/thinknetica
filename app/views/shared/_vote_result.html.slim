@@ -1,0 +1,4 @@
+- unless votable.vote(current_user).nil?
+  = votable.vote_description(current_user)
+  br
+  = link_to 'Revote', vote_path(votable.vote(current_user)), class: 'revote-link', data: { remote: true, method: :delete }

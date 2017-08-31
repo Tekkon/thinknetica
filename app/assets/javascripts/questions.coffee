@@ -10,14 +10,17 @@ $ ->
     $('form#edit-question-' + question_id).show()
 
   $('.rb-vote').bind 'ajax:success', (e, data, status, xhr) ->
-    vote = $.parseJSON(xhr.responseText)
+    result = $.parseJSON(xhr.responseText)
+    $('#question-' + result.vote.votable_id + '-vote-result').html(result.html)
+    $('#question-' + result.vote.votable_id + '-vote').html('')
+  .bind 'ajax:error', (e, data, status, xhr) ->
+    result = $.parseJSON(xhr.responseText)
+    $('#question-' + result.vote.votable_id + '-vote').append(result.error)
 
-    $('#question-' + vote.votable_id + '-vote').remove()
-
-    vote_type = null
-    if vote.vote_type == 1
-      vote_type = 'for'
-    else
-      vote_type = 'against'
-
-    $('#question-' + vote.votable_id + '-vote-result').html('You have voted ' + vote_type + ' this question.')
+  $('.revote-link').bind 'ajax:success', (e, data, status, xhr) ->
+    result = $.parseJSON(xhr.responseText)
+    $('#question-' + result.vote.votable_id + '-vote').html(result.html)
+    $('#question-' + result.vote.votable_id + '-vote-result').html('')
+  .bind 'ajax:error', (e, data, status, xhr) ->
+    result = $.parseJSON(xhr.responseText)
+    $('#question-' + result.vote.votable_id + '-vote-result').append(result.error)
