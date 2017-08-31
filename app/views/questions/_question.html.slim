@@ -5,7 +5,8 @@
       br
       = question.body
       br
-      = "Rating: #{question.rating}"
+      div id="question-#{question.id}-rating"
+        = "Rating: #{question.rating}"
       br
 
       - if user_signed_in?

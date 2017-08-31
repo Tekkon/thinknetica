@@ -14,7 +14,7 @@ module Voted
           render json: { error: "You have alredy voted." }
         else
           @vote = @votable.vote!(current_user, params[:vote_type])
-          render json: { vote: @vote, html: render_to_string(partial: 'shared/vote_result', layout: false, formats: :html, locals: { votable: @votable }) }
+          render json: { vote: @vote, rating: @votable.rating, html: render_to_string(partial: 'shared/vote_result', layout: false, formats: :html, locals: { votable: @votable }) }
         end
       end
     end
@@ -28,6 +28,7 @@ module Voted
         if @vote
           @votable.revote!(current_user)
           render json: { vote: @vote,
+                         rating: @votable.rating,
                          html: render_to_string(partial: 'shared/vote_buttons', layout: false, formats: :html, locals: { votable: @votable, votable_type: @vote.votable_type }) }
         else
           render json: { error: 'Only the author of the vote can delete it.' }

@@ -22,6 +22,7 @@ feature 'Question voting', %q{
 
       within "#question-#{questions[0].id}" do
         expect(page).to have_content 'You have voted for this question.'
+        expect(page).to have_content 'Rating: 1'
       end
     end
 
@@ -30,6 +31,7 @@ feature 'Question voting', %q{
 
       within "#question-#{questions[0].id}" do
         expect(page).to have_content 'You have voted against this question.'
+        expect(page).to have_content 'Rating: -1'
       end
     end
 
@@ -45,8 +47,11 @@ feature 'Question voting', %q{
     scenario 'can revote for or against question', js: true do
       within "#question-#{questions[1].id}" do
         click_on 'Revote'
+        expect(page).to have_content 'Rating: 0'
+
         choose "rb_vote_question_#{questions[1].id}_1"
         expect(page).to have_content 'You have voted for this question.'
+        expect(page).to have_content 'Rating: 1'
       end
     end
   end

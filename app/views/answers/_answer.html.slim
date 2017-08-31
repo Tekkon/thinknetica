@@ -2,7 +2,8 @@
   div id="answer-#{answer.id}"
     = answer.body
     br
-    = "Rating: #{answer.rating}"
+    div id="answer-#{answer.id}-rating"
+      = "Rating: #{answer.rating}"
     br
 
     - if user_signed_in?

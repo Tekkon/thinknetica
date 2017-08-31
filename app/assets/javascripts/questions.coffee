@@ -13,6 +13,7 @@ $ ->
     result = $.parseJSON(xhr.responseText)
     $('#question-' + result.vote.votable_id + '-vote-result').html(result.html)
     $('#question-' + result.vote.votable_id + '-vote').html('')
+    $('#question-' + result.vote.votable_id + '-rating').html('Rating: ' + result.rating)
   .bind 'ajax:error', (e, data, status, xhr) ->
     result = $.parseJSON(xhr.responseText)
     $('#question-' + result.vote.votable_id + '-vote').append(result.error)
@@ -21,6 +22,7 @@ $ ->
     result = $.parseJSON(xhr.responseText)
     $('#question-' + result.vote.votable_id + '-vote').html(result.html)
     $('#question-' + result.vote.votable_id + '-vote-result').html('')
+    $('#question-' + result.vote.votable_id + '-rating').html('Rating: ' + result.rating)
   .bind 'ajax:error', (e, data, status, xhr) ->
     result = $.parseJSON(xhr.responseText)
     $('#question-' + result.vote.votable_id + '-vote-result').append(result.error)
