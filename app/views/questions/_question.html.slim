@@ -10,7 +10,7 @@
 
       - if user_signed_in?
         div id="question-#{question.id}-vote"
-          = render 'shared/vote_buttons', votable: question, votable_type: 'Question'
+          = render 'shared/vote_buttons', votable: question
 
         div id="question-#{question.id}-vote-result"
           = render 'shared/vote_result', votable: question

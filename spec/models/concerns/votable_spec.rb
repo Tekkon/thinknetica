@@ -20,6 +20,14 @@ shared_examples_for 'votable' do
       expect(votable.vote_description(vote_user)).to eq "You have voted for this #{model.to_s.underscore}."
     end
 
+    it '#vote!' do
+      expect { votable.vote!(user, 1) }.to change { Vote.count }.by(1)
+    end
+
+    it '#revote!' do
+      expect { votable.revote!(vote_user) }.to change { Vote.count }.by(-1)
+    end
+
     it '#rating' do
       expect(votable.rating).to eq 1
     end

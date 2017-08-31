@@ -2,12 +2,20 @@ Rails.application.routes.draw do
   devise_for :users
   root to: "questions#index"
 
-  resources :questions do
+  concern :voted do
+    member do
+      post :vote
+      post :revote
+    end
+  end
+
+  resources :questions, concerns: [:voted] do
     resources :answers do
       put :mark_favorite, on: :member
     end
   end
 
+  resources :answers, concerns: [:voted], only: [:create_vote, :destroy_vote]
+
   resources :attachments, only: [:destroy]
-  resources :votes, only: [:create, :destroy]
 end

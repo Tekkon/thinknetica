@@ -1,4 +1,6 @@
 class AnswersController < ApplicationController
+  include Voted
+
   respond_to :html, :js
 
   before_action :authenticate_user!

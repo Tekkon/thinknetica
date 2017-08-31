@@ -1,8 +1,10 @@
 require 'rails_helper'
+require_relative 'concerns/voted_spec.rb'
 
 RSpec.describe QuestionsController, type: :controller do
+  it_behaves_like 'voted'
+
   let(:user) { create(:user) }
-  let!(:question) { create(:question, user: user) }
 
   describe 'GET #index' do
     let(:questions) { create_list(:question, 2, user: user) }
@@ -19,6 +21,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #show' do
+    let!(:question) { create(:question, user: user) }
     before { get :show, params: { id: question } }
 
     it 'assigns the requested question to @question' do
@@ -56,6 +59,8 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #edit' do
+    let!(:question) { create(:question, user: user) }
+
     sign_in_user
     before { get :edit, params: { id: question } }
 
@@ -102,6 +107,7 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'PATCH #update' do
     let(:another_user) { create(:user) }
+    let!(:question) { create(:question, user: user) }
     let(:another_question) { create(:question, user: another_user) }
 
     before { sign_in_the_user(user) }
@@ -139,6 +145,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
+    let!(:question) { create(:question, user: user) }
     sign_in_user
 
     context 'user is the author of the question' do
@@ -149,7 +156,7 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
 
-    context 'user is not the author of the qurstion' do
+    context 'user is not the author of the question' do
       it 'not deletes the question' do
         expect { delete :destroy, params: { id: question } }.to_not change(Question, :count)
       end
