@@ -9,20 +9,22 @@ $ ->
     question_id = $(this).data('questionId')
     $('form#edit-question-' + question_id).show()
 
-  $('.rb-vote').bind 'ajax:success', (e, data, status, xhr) ->
+  $(document).on('ajax:success', '.rb-vote', (e, data, status, xhr) ->
     result = $.parseJSON(xhr.responseText)
     $('#question-' + result.vote.votable_id + '-vote-result').html(result.html)
     $('#question-' + result.vote.votable_id + '-vote').html('')
     $('#question-' + result.vote.votable_id + '-rating').html('Rating: ' + result.rating)
-  .bind 'ajax:error', (e, data, status, xhr) ->
+  ).on('ajax:error', '.rb-vote', (e, data, status, xhr) ->
     result = $.parseJSON(xhr.responseText)
     $('#question-' + result.vote.votable_id + '-vote').append(result.error)
+  )
 
-  $('.revote-link').bind 'ajax:success', (e, data, status, xhr) ->
+  $(document).on('ajax:success', '.revote-link', (e, data, status, xhr) ->
     result = $.parseJSON(xhr.responseText)
     $('#question-' + result.vote.votable_id + '-vote').html(result.html)
     $('#question-' + result.vote.votable_id + '-vote-result').html('')
     $('#question-' + result.vote.votable_id + '-rating').html('Rating: ' + result.rating)
-  .bind 'ajax:error', (e, data, status, xhr) ->
+  ).on('ajax:error', '.revote-link', (e, data, status, xhr) ->
     result = $.parseJSON(xhr.responseText)
     $('#question-' + result.vote.votable_id + '-vote-result').append(result.error)
+  )
