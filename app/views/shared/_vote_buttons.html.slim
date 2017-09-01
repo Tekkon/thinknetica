@@ -1,8 +1,9 @@
 - if !current_user.author_of?(votable) && votable.vote(current_user).nil?
   = label "vote_#{votable.class.to_s.downcase}_#{votable.id}", 'Vote for'
   = radio_button 'rb', "vote_#{votable.class.to_s.downcase}_#{votable.id}", "1", class: 'rb-vote', data: { remote: true, method: :post,
-          url: votable.class.to_s == 'Question' ? vote_for_question_path({ id: votable }) : vote_for_answer_path({ id: votable }) }
+          url: polymorphic_path([:vote_for, votable]) }
+
   br
   = label "vote_#{votable.class.to_s.downcase}_#{votable.id}", 'Vote against'
   = radio_button 'rb', "vote_#{votable.class.to_s.downcase}_#{votable.id}", "0", class: 'rb-vote', data: { remote: true, method: :post,
-          url: votable.class.to_s == 'Question' ? vote_against_question_path({ id: votable }) : vote_against_answer_path({ id: votable }) }
+          url: polymorphic_path([:vote_against, votable]) }
