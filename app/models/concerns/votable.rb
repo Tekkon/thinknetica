@@ -18,10 +18,6 @@ module Votable
     votes.where(user: user).first
   end
 
-  def vote_description(user)
-    "You have voted #{vote(user).vote_type == 1 ? 'for' : 'against'} this #{self.class.name.downcase}."
-  end
-
   def rating
     votes.map { |v| v.vote_type }.sum
   end
