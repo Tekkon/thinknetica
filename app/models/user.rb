@@ -9,10 +9,8 @@ class User < ApplicationRecord
   has_many :votes
 
   def author_of?(object)
-    if object.present?
-      self.id == object.user_id
-    else
-      false
-    end
+    return false unless object
+
+    self.id == object.user_id
   end
 end
