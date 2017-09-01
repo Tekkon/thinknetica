@@ -11,7 +11,7 @@ $ ->
 
   $(document).on('ajax:success', '.rb-vote', (e, data, status, xhr) ->
     result = $.parseJSON(xhr.responseText)
-    $('#question-' + result.vote.votable_id + '-vote-result').html(result.html)
+    $('#question-' + result.vote.votable_id + '-vote-result').html(JST['vote_result']({ vote: result.vote }))
     $('#question-' + result.vote.votable_id + '-vote').html('')
     $('#question-' + result.vote.votable_id + '-rating').html('Rating: ' + result.rating)
   ).on('ajax:error', '.rb-vote', (e, data, status, xhr) ->
@@ -21,7 +21,7 @@ $ ->
 
   $(document).on('ajax:success', '.revote-link', (e, data, status, xhr) ->
     result = $.parseJSON(xhr.responseText)
-    $('#question-' + result.vote.votable_id + '-vote').html(result.html)
+    $('#question-' + result.vote.votable_id + '-vote').html(JST['vote_buttons']({ vote: result.vote }))
     $('#question-' + result.vote.votable_id + '-vote-result').html('')
     $('#question-' + result.vote.votable_id + '-rating').html('Rating: ' + result.rating)
   ).on('ajax:error', '.revote-link', (e, data, status, xhr) ->

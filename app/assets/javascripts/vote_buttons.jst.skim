@@ -1,0 +1,7 @@
+<label>Vote for</label>
+
+<input class="rb-vote" data-remote="true" data-method="post" data-url="/#{@vote.votable_type.toLowerCase()}s/#{@vote.votable_id}/vote_for" type="radio" value="1" name="rb[vote_#{@vote.votable_type.toLowerCase()}_1]" id="rb_vote_#{@vote.votable_type.toLowerCase()}_#{@vote.votable_id}_1">
+br
+
+<label>Vote against</label>
+<input class="rb-vote" data-remote="true" data-method="post" data-url="/#{@vote.votable_type.toLowerCase()}s/#{@vote.votable_id}/vote_against" type="radio" value="0" name="rb[vote_#{@vote.votable_type.toLowerCase()}_0]" id="rb_vote_#{@vote.votable_type.toLowerCase()}_#{@vote.votable_id}_0">
