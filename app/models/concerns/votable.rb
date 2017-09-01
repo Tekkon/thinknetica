@@ -19,6 +19,6 @@ module Votable
   end
 
   def rating
-    votes.map { |v| v.vote_type }.sum
+    votes.sum(:vote_type)
   end
 end
