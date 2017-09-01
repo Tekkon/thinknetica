@@ -13,7 +13,7 @@ module Voted
         elsif @votable.vote(current_user)
           render json: { error: "You have alredy voted." }
         else
-          @vote = @votable.vote!(current_user, 1)
+          @vote = @votable.vote_by(current_user, 1)
           render json: { vote: @vote, rating: @votable.rating, html: render_to_string(partial: 'shared/vote_result', layout: false, formats: :html, locals: { votable: @votable }) }
         end
       end
@@ -28,7 +28,7 @@ module Voted
         elsif @votable.vote(current_user)
           render json: { error: "You have alredy voted." }
         else
-          @vote = @votable.vote!(current_user, -1)
+          @vote = @votable.vote_by(current_user, -1)
           render json: { vote: @vote, rating: @votable.rating, html: render_to_string(partial: 'shared/vote_result', layout: false, formats: :html, locals: { votable: @votable }) }
         end
       end
@@ -41,7 +41,7 @@ module Voted
         @vote = @votable.vote(current_user)
 
         if @vote
-          @votable.revote!(current_user)
+          @votable.revote(current_user)
           render json: { vote: @vote,
                          rating: @votable.rating,
                          html: render_to_string(partial: 'shared/vote_buttons', layout: false, formats: :html, locals: { votable: @votable, votable_type: @vote.votable_type }) }
