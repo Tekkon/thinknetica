@@ -4,7 +4,8 @@ Rails.application.routes.draw do
 
   concern :voted do
     member do
-      post :vote
+      post :vote_for
+      post :vote_against
       post :revote
     end
   end

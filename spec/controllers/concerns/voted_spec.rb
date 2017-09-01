@@ -11,11 +11,11 @@ shared_examples "voted" do
 
       context 'with valid attributes' do
         it 'saves the new vote in the database' do
-          expect { post :vote, params: { id: votable, vote_type: '1' }, format: :json }.to change(Vote, :count).by(1)
+          expect { post :vote_for, params: { id: votable }, format: :json }.to change(Vote, :count).by(1)
         end
 
         it 'renders create_voted vote' do
-          post :vote, params: { id: votable, vote_type: '1' }, format: :json
+          post :vote_for, params: { id: votable }, format: :json
           expect(JSON.parse(response.body)['vote']['id']).to eq Vote.first.id
         end
       end
@@ -25,11 +25,11 @@ shared_examples "voted" do
       before { sign_in_the_user(user) }
 
       it 'not saves the new vote in the database' do
-        expect { post :vote, params: { id: votable, vote_type: '1' }, format: :json }.to_not change(Vote, :count)
+        expect { post :vote_for, params: { id: votable }, format: :json }.to_not change(Vote, :count)
       end
 
       it 'renders error' do
-        post :vote, params: { id: votable, vote_type: '1' }, format: :json
+        post :vote_for, params: { id: votable }, format: :json
         expect(JSON.parse(response.body)['error']).to eq "Author can't vote his question or answer."
       end
     end

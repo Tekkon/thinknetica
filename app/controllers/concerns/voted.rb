@@ -2,10 +2,10 @@ module Voted
   extend ActiveSupport::Concern
 
   included do
-    before_action :load_votable, only: [:vote, :revote]
+    before_action :load_votable, only: [:vote_for, :vote_against, :revote]
   end
 
-  def vote
+  def vote_for
     respond_to do |format|
       format.json do
         if current_user.author_of?(@votable)
@@ -13,7 +13,22 @@ module Voted
         elsif @votable.vote(current_user)
           render json: { error: "You have alredy voted." }
         else
-          @vote = @votable.vote!(current_user, params[:vote_type])
+          @vote = @votable.vote!(current_user, 1)
+          render json: { vote: @vote, rating: @votable.rating, html: render_to_string(partial: 'shared/vote_result', layout: false, formats: :html, locals: { votable: @votable }) }
+        end
+      end
+    end
+  end
+
+  def vote_against
+    respond_to do |format|
+      format.json do
+        if current_user.author_of?(@votable)
+          render json: { error: "Author can't vote his question or answer." }
+        elsif @votable.vote(current_user)
+          render json: { error: "You have alredy voted." }
+        else
+          @vote = @votable.vote!(current_user, -1)
           render json: { vote: @vote, rating: @votable.rating, html: render_to_string(partial: 'shared/vote_result', layout: false, formats: :html, locals: { votable: @votable }) }
         end
       end
