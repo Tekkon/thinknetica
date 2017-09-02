@@ -1,0 +1,4 @@
+- unless votable.vote_by(current_user).nil?
+  = vote_description(votable, current_user)
+  br
+  = link_to 'Revote', polymorphic_path([:revote, votable]), class: 'revote-link', data: {remote: true, method: :post}

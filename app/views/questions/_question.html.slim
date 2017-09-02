@@ -1,7 +1,21 @@
 - if question.persisted?
   div id="question-#{question.id}"
-    p= question.title
-    p= question.body
+    p
+      = question.title
+      br
+      = question.body
+      br
+      div id="question-#{question.id}-rating"
+        = "Rating: #{question.rating}"
+      br
+
+      - if user_signed_in?
+        div id="question-#{question.id}-vote"
+          = render 'shared/vote_buttons', votable: question
+
+        div id="question-#{question.id}-vote-result"
+          = render 'shared/vote_result', votable: question
+
     - if user_signed_in? && current_user.author_of?(question)
       = link_to 'Edit', '', class: 'edit-question-link', data: {question_id: question.id}
       br
