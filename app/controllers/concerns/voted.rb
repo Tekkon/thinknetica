@@ -10,10 +10,10 @@ module Voted
       format.json do
         if current_user.author_of?(@votable)
           render json: { error: "Author can't vote his question or answer." }
-        elsif @votable.vote(current_user)
+        elsif @votable.vote_by(current_user)
           render json: { error: "You have alredy voted." }
         else
-          @vote = @votable.vote_by(current_user, 1)
+          @vote = @votable.vote!(current_user, 1)
           render json: { vote: @vote, rating: @votable.rating }
         end
       end
@@ -25,10 +25,10 @@ module Voted
       format.json do
         if current_user.author_of?(@votable)
           render json: { error: "Author can't vote his question or answer." }
-        elsif @votable.vote(current_user)
+        elsif @votable.vote_by(current_user)
           render json: { error: "You have alredy voted." }
         else
-          @vote = @votable.vote_by(current_user, -1)
+          @vote = @votable.vote!(current_user, -1)
           render json: { vote: @vote, rating: @votable.rating }
         end
       end
@@ -38,10 +38,10 @@ module Voted
   def revote
     respond_to do |format|
       format.json do
-        @vote = @votable.vote(current_user)
+        @vote = @votable.vote_by(current_user)
 
         if @vote
-          @votable.revote(current_user)
+          @votable.revote!(current_user)
           render json: { vote: @vote,
                          rating: @votable.rating,
                          html: render_to_string(partial: 'shared/vote_buttons', layout: false, formats: :html, locals: { votable: @votable, votable_type: @vote.votable_type }) }

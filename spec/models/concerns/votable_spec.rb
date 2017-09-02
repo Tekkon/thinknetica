@@ -13,15 +13,15 @@ shared_examples_for 'votable' do
     let!(:vote) { create(:vote, votable: votable, votable_type: model.to_s, vote_type: 1, user: vote_user) }
 
     it '#vote' do
-      expect(votable.vote(vote_user)).to eq vote
+      expect(votable.vote_by(vote_user)).to eq vote
     end
 
-    it '#vote_by' do
-      expect { votable.vote_by(user, 1) }.to change { Vote.count }.by(1)
+    it '#vote!' do
+      expect { votable.vote!(user, 1) }.to change { Vote.count }.by(1)
     end
 
-    it '#revote' do
-      expect { votable.revote(vote_user) }.to change { Vote.count }.by(-1)
+    it '#revote!' do
+      expect { votable.revote!(vote_user) }.to change { Vote.count }.by(-1)
     end
 
     it '#rating' do
