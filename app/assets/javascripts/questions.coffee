@@ -3,7 +3,6 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 $ ->
-  #$('.edit-question-link').click (e) ->
   $(document).on('click', '.edit-question-link', (e) ->
     e.preventDefault()
     $(this).hide()
@@ -33,7 +32,7 @@ $ ->
 
   App.cable.subscriptions.create('QuestionsChannel', {
     connected: ->
-      console.log 'Connected!'
+      console.log 'Connected to questions!'
       @perform 'follow'
     ,
 

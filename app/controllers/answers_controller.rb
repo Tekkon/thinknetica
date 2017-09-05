@@ -5,6 +5,7 @@ class AnswersController < ApplicationController
 
   before_action :authenticate_user!
   before_action :find_question, only: [:new, :create]
+  after_action :publish_answer, only: [:create]
 
   def create
     @answer = @question.answers.new(answer_params)
@@ -47,6 +48,15 @@ class AnswersController < ApplicationController
   end
 
   private
+
+  def publish_answer
+    return if @answer.errors.any?
+
+    ActionCable.server.broadcast(
+        'answers',
+        { answer: @answer.as_json(include: { attachments: { methods: :filename } }), question: @question, rating: @answer.rating, user_id: current_user.id }
+    )
+  end
 
   def answer_params
     params.require(:answer).permit(:body, attachments_attributes: [:file])

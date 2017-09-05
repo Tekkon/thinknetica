@@ -1,0 +1,43 @@
+div id="answer-#{@answer.id}"
+  = @answer.body
+  br
+  div id="answer-#{@answer.id}-rating" Rating: #{@rating}
+  br
+
+  - if @user_id != gon.user_id
+    div id="answer-#{@answer.id}-vote"
+      == JST["vote_buttons"]({ votable: @answer, votable_type: 'Answer' })
+
+    div id="answer-#{@answer.id}-vote-result"
+
+  - if @answer.attachments.length > 0
+    div id="answer-#{@answer.id}-attachments"
+      label for="answer_attachments" Attachments:
+      ul
+        - scope_user_id = @user_id
+        - @answer.attachments.forEach (item, i, arr) ->
+          - if item.id != undefined && item.id != null
+            li id="attachment-#{item.id}"
+              a href="#{item.file.url}" #{item.filename}
+              br
+              - if scope_user_id == gon.user_id
+                a href="/attachments/#{item.id}" data-remote="true" data-method="delete" remove
+
+  - if gon.question_user_id == gon.user_id
+    label id="favorite-label" Favorite
+    input class="favorite-check" data-remote="true" data-method="put" data-url="/questions/#{@question.id}/answers/#{@answer.id}/mark_favorite" type="radio" value="answer_#{@answer.id}" name="rb[favorite]" id="rb_favorite_answer_#{@answer.id}"
+    br
+
+  - if @user_id == gon.user_id
+    a.edit-answer-link href="#" data-answer-id="#{@answer.id}" Edit
+    br
+    a href="/questions/#{@question.id}/answers/#{@answer.id}" data-method="delete" data-remote="true" Delete
+
+    form id="edit-answer-#{@answer.id}" class="edit_answer" action="/questions/#{@question.id}/answers/#{@answer.id}" data-remote="true" method="post"
+      input type="hidden" name="_method" value="patch"
+      div id="answer-#{@answer.id}-errors"
+        == JST["error_messages"]({ target: @answer})
+      label for="answer_body" Answer
+      textarea name="answer[body]" id="answer_body" #{@answer.body}
+      br
+      input type="submit" name="commit" value="Save" data-disable-with="Save"

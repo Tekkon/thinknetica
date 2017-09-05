@@ -46,7 +46,7 @@ feature 'Create question', %q{
   end
 
   context 'multiple sessions' do
-    scenario "question appears on another user's page" do
+    scenario "question appears on another user's page", js: true do
       Capybara.using_session('user') do
         sign_in(user)
         visit questions_path
@@ -57,7 +57,6 @@ feature 'Create question', %q{
       end
 
       Capybara.using_session('user') do
-        visit questions_path
         click_on 'Ask question'
         fill_in 'Title', with: 'Test question'
         fill_in 'Body', with: 'test text'

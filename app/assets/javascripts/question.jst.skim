@@ -7,14 +7,13 @@ div id="question-#{@question.id}"
     div id="question-#{@question.id}-rating" Rating: #{@rating}
     br
 
-    - if @user_id == gon.user_id && !@is_author
+    - if @user_id != gon.user_id
       div id="question-#{@question.id}-vote"
         == JST["vote_buttons"]({ votable: @question, votable_type: 'Question' })
 
-      /div id="question-#{@question.id}-vote-result"
-        == JST["vote_result"]({ vote: @vote })
+      div id="question-#{@question.id}-vote-result"
 
-  - if @user_id == gon.user_id && @is_author
+  - if @user_id == gon.user_id
     a.edit-question-link href="#" data-question-id="#{@question.id}" Edit
     br
     a href="questions/#{@question.id}" data-method="delete" Delete

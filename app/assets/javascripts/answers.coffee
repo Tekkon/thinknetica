@@ -3,11 +3,12 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 $ ->
-  $('.edit-answer-link').click (e) ->
+  $(document).on('click', '.edit-answer-link', (e) ->
     e.preventDefault()
     $(this).hide()
     answer_id = $(this).data('answerId')
     $('form#edit-answer-' + answer_id).show()
+  )
 
   $(document).on('ajax:success', '.rb-vote', (e, data, status, xhr) ->
     result = $.parseJSON(xhr.responseText)
@@ -28,3 +29,14 @@ $ ->
     result = $.parseJSON(xhr.responseText)
     $('#answer-' + result.vote.votable_id + '-vote-result').append(result.error)
   )
+
+  App.cable.subscriptions.create('AnswersChannel', {
+    connected: ->
+      console.log 'Connected to answers!'
+      @perform 'follow'
+    ,
+
+    received: (data) ->
+      console.log data
+      $('.answers').append JST['answer'](data)
+  })
