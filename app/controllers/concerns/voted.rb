@@ -42,9 +42,7 @@ module Voted
 
         if @vote
           @votable.revote!(current_user)
-          render json: { vote: @vote,
-                         rating: @votable.rating,
-                         html: render_to_string(partial: 'shared/vote_buttons', layout: false, formats: :html, locals: { votable: @votable, votable_type: @vote.votable_type }) }
+          render json: { vote: @vote, votable: @votable, rating: @votable.rating }
         else
           render json: { error: 'Only the author of the vote can delete it.' }
         end

@@ -1,0 +1,33 @@
+div id="question-#{@question.id}"
+  p
+    = @question.title
+    br
+    = @question.body
+    br
+    div id="question-#{@question.id}-rating" Rating: #{@rating}
+    br
+
+    - if @user_id == gon.user_id && !@is_author
+      div id="question-#{@question.id}-vote"
+        == JST["vote_buttons"]({ votable: @question, votable_type: 'Question' })
+
+      /div id="question-#{@question.id}-vote-result"
+        == JST["vote_result"]({ vote: @vote })
+
+  - if @user_id == gon.user_id && @is_author
+    a.edit-question-link href="#" data-question-id="#{@question.id}" Edit
+    br
+    a href="questions/#{@question.id}" data-method="delete" Delete
+    br
+
+    form id="edit-question-#{@question.id}" data-remote="true" class="edit_question" action="/questions/#{@question.id}" method="post"
+      div id="question-#{@question.id}-errors"
+        == JST["error_messages"]({ target: @question})
+      input type="hidden" name="_method" value="patch"
+      label for="question_title" Title
+      input type="text" value="#{@question.title}" name="question[title]" id="question_title"
+      br
+      label for="question_body" Question
+      textarea name="question[body]" id="question_body" #{@question.body}
+      br
+      input type="submit" name="commit" value="Save" data-disable-with="Save"

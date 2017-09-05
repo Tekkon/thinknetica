@@ -1,0 +1,4 @@
+- if @target.errors != undefined && @target.errors.count > 0
+  - @target.errors.full_messages.forEach (item, i, arr) ->
+      p item
+      br

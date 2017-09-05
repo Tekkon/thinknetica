@@ -23,5 +23,7 @@ module Thinknetica
 
       g.fixture_replacement :factory_girl, dir: 'spec/factories'
     end
+
+    config.action_cable.disable_request_forgery_protection = false
   end
 end
