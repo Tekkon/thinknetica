@@ -12,7 +12,7 @@ $ ->
 
   $(document).on('ajax:success', '.rb-vote', (e, data, status, xhr) ->
     result = $.parseJSON(xhr.responseText)
-    $('#question-' + result.vote.votable_id + '-vote-result').html(JST['vote_result'](result))
+    $('#question-' + result.vote.votable_id + '-vote-result').html(JST['templates/vote_result'](result))
     $('#question-' + result.vote.votable_id + '-vote').html('')
     $('#question-' + result.vote.votable_id + '-rating').html('Rating: ' + result.rating)
   ).on('ajax:error', '.rb-vote', (e, data, status, xhr) ->
@@ -22,7 +22,7 @@ $ ->
 
   $(document).on('ajax:success', '.revote-link', (e, data, status, xhr) ->
     result = $.parseJSON(xhr.responseText)
-    $('#question-' + result.vote.votable_id + '-vote').html(JST['vote_buttons']({ votable: result.votable, votable_type: 'Question' }))
+    $('#question-' + result.vote.votable_id + '-vote').html(JST['templates/vote_buttons']({ votable: result.votable, votable_type: 'Question' }))
     $('#question-' + result.vote.votable_id + '-vote-result').html('')
     $('#question-' + result.vote.votable_id + '-rating').html('Rating: ' + result.rating)
   ).on('ajax:error', '.revote-link', (e, data, status, xhr) ->
@@ -43,10 +43,10 @@ $ ->
     $('#comment-question-link-' + result.comment.commentable_id).show()
     $('#comment-question-' + result.comment.commentable_id + '-errors').html('')
     $('#comment_body').val('')
-    $('#question-' + result.comment.commentable_id + '-comments').append(JST['comment'](result))
+    $('#question-' + result.comment.commentable_id + '-comments').append(JST['templates/comment'](result))
   ).on('ajax:error', '.new-question-comment', (e, data, status, xhr) ->
     result = $.parseJSON(data.responseText)
-    $('#comment-question-' + result.commentable_id + '-errors').html(JST['error_messages']({ errors: result.errors }))
+    $('#comment-question-' + result.commentable_id + '-errors').html(JST['templates/error_messages']({ errors: result.errors }))
   )
 
   App.cable.subscriptions.create('QuestionsChannel', {
@@ -57,5 +57,5 @@ $ ->
 
     received: (data) ->
       console.log data
-      $('.questions').append JST['question'](data)
+      $('.questions').append JST['templates/question'](data)
   })

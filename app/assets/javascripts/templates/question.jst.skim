@@ -8,7 +8,7 @@ div id="question-#{@question.id}"
 
   - if @user_id != gon.user_id
     div id="question-#{@question.id}-vote"
-      == JST["vote_buttons"]({ votable: @question, votable_type: 'Question' })
+      == JST["templates/vote_buttons"]({ votable: @question, votable_type: 'Question' })
 
     div id="question-#{@question.id}-vote-result"
 
@@ -20,7 +20,7 @@ div id="question-#{@question.id}"
 
     form id="edit-question-#{@question.id}" data-remote="true" class="edit_question" action="/questions/#{@question.id}" method="post"
       div id="question-#{@question.id}-errors"
-        == JST["error_messages"]({ target: @question})
+        == JST["templates/error_messages"]({ target: @question})
       input type="hidden" name="_method" value="patch"
       label for="question_title" Title
       input type="text" value="#{@question.title}" name="question[title]" id="question_title"
