@@ -38,6 +38,35 @@ feature 'Comment answer', %q{
     end
   end
 
+  context 'multiple sessions' do
+    scenario "answer appears on another user's page", js: true do
+      Capybara.using_session('user') do
+        sign_in(user)
+        visit question_path question
+      end
+
+      Capybara.using_session('guest') do
+        visit question_path question
+      end
+
+      Capybara.using_session('user') do
+        within "#answer-#{answer.id}" do
+          click_on 'Comment'
+          fill_in 'Comment', with: 'New Comment'
+          click_on 'Add comment'
+
+          expect(page).to have_content 'New Comment'
+        end
+      end
+
+      Capybara.using_session('guest') do
+        within "#answer-#{answer.id}" do
+          expect(page).to have_content 'New Comment'
+        end
+      end
+    end
+  end
+
   context 'Unauthenticated user' do
     scenario "doesn't see comment link" do
       visit question_path question

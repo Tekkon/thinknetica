@@ -11,7 +11,7 @@ p Attachments:
         li id="attachment-#{a.id}"
           = link_to a.file.identifier, a.file.url
           br
-          - if current_user.author_of?(@question)
+          - if user_signed_in? && current_user.author_of?(@question)
             = link_to 'remove', attachment_path(a), data: { remote: true, method: :delete }
 
 h2 Answers

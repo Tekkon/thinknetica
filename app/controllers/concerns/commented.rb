@@ -3,6 +3,7 @@ module Commented
 
   included do
     before_action :load_commentable, only: [:comment]
+    after_action :publish_comment, only: [:comment]
   end
 
   def comment
@@ -32,5 +33,14 @@ module Commented
 
   def comment_params
     params.require(:comment).permit(:body)
+  end
+
+  def publish_comment
+    return if @comment.errors.any?
+
+    ActionCable.server.broadcast(
+        'comments',
+        { comment: @comment.as_json(include: :user) }
+    )
   end
 end

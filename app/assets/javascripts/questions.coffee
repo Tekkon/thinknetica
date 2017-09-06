@@ -43,7 +43,6 @@ $ ->
     $('#comment-question-link-' + result.comment.commentable_id).show()
     $('#comment-question-' + result.comment.commentable_id + '-errors').html('')
     $('#comment_body').val('')
-    $('#question-' + result.comment.commentable_id + '-comments').append(JST['templates/comment'](result))
   ).on('ajax:error', '.new-question-comment', (e, data, status, xhr) ->
     result = $.parseJSON(data.responseText)
     $('#comment-question-' + result.commentable_id + '-errors').html(JST['templates/error_messages']({ errors: result.errors }))

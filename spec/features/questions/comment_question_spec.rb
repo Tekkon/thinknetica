@@ -30,6 +30,31 @@ feature 'Comment question', %q{
     end
   end
 
+  context 'multiple sessions' do
+    scenario "answer appears on another user's page", js: true do
+      Capybara.using_session('user') do
+        sign_in(user)
+        visit questions_path
+      end
+
+      Capybara.using_session('guest') do
+        visit questions_path
+      end
+
+      Capybara.using_session('user') do
+        click_on 'Comment'
+        fill_in 'Comment', with: 'New Comment'
+        click_on 'Add comment'
+
+        expect(page).to have_content 'New Comment'
+      end
+
+      Capybara.using_session('guest') do
+        expect(page).to have_content 'New Comment'
+      end
+    end
+  end
+
   context 'Unauthenticated user' do
     scenario "doesn't see comment link" do
       visit questions_path
