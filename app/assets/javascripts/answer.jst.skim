@@ -36,7 +36,7 @@ div id="answer-#{@answer.id}"
     form id="edit-answer-#{@answer.id}" class="edit_answer" action="/questions/#{@question.id}/answers/#{@answer.id}" data-remote="true" method="post"
       input type="hidden" name="_method" value="patch"
       div id="answer-#{@answer.id}-errors"
-        == JST["error_messages"]({ target: @answer})
+        /== JST["error_messages"]({ errors: @answer.errors.full_messages })
       label for="answer_body" Answer
       textarea name="answer[body]" id="answer_body" #{@answer.body}
       br

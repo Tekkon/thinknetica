@@ -13,6 +13,14 @@
       div id="answer-#{answer.id}-vote-result"
         = render 'shared/vote_result', votable: answer
 
+    br
+
+    div id="answer-#{answer.id}-comments"
+      = label :comments, 'Comments:'
+      - if answer.comments.any?
+        br
+        = render answer.comments
+
     - if answer.attachments.any?
       div id="answer-#{answer.id}-attachments"
         = label :answer_attachments, 'Attachments:'
@@ -45,4 +53,6 @@
           br
           = f.submit 'Save'
 
-      br
+    = render 'shared/comment_form', commentable: answer
+
+  br

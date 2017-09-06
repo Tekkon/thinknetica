@@ -16,7 +16,7 @@ $ ->
     $('#question-' + result.vote.votable_id + '-vote').html('')
     $('#question-' + result.vote.votable_id + '-rating').html('Rating: ' + result.rating)
   ).on('ajax:error', '.rb-vote', (e, data, status, xhr) ->
-    result = $.parseJSON(xhr.responseText)
+    result = $.parseJSON(data.responseText)
     $('#question-' + result.vote.votable_id + '-vote').append(result.error)
   )
 
@@ -26,8 +26,27 @@ $ ->
     $('#question-' + result.vote.votable_id + '-vote-result').html('')
     $('#question-' + result.vote.votable_id + '-rating').html('Rating: ' + result.rating)
   ).on('ajax:error', '.revote-link', (e, data, status, xhr) ->
-    result = $.parseJSON(xhr.responseText)
+    result = $.parseJSON(data.responseText)
     $('#question-' + result.vote.votable_id + '-vote-result').append(result.error)
+  )
+
+  $(document).on('click', '.comment-question-link', (e) ->
+    e.preventDefault()
+    $(this).hide()
+    question_id = $(this).data('commentableId')
+    $('form#comment-question-' + question_id).show()
+  )
+
+  $(document).on('ajax:success', '.new-question-comment', (e, data, status, xhr) ->
+    result = $.parseJSON(xhr.responseText)
+    $('form#comment-question-' + result.comment.commentable_id).hide()
+    $('#comment-question-link-' + result.comment.commentable_id).show()
+    $('#comment-question-' + result.comment.commentable_id + '-errors').html('')
+    $('#comment_body').val('')
+    $('#question-' + result.comment.commentable_id + '-comments').append(JST['comment'](result))
+  ).on('ajax:error', '.new-question-comment', (e, data, status, xhr) ->
+    result = $.parseJSON(data.responseText)
+    $('#comment-question-' + result.commentable_id + '-errors').html(JST['error_messages']({ errors: result.errors }))
   )
 
   App.cable.subscriptions.create('QuestionsChannel', {

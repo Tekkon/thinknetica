@@ -10,13 +10,20 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :questions, concerns: [:voted] do
+  concern :commented do
+    member do
+      post :comment
+    end
+  end
+
+  resources :questions, concerns: [:voted, :commented] do
     resources :answers do
       put :mark_favorite, on: :member
     end
   end
 
   resources :answers, concerns: [:voted], only: [:create_vote, :destroy_vote]
+  resources :answers, concerns: [:commented], only: [:comment]
   resources :attachments, only: [:destroy]
 
   mount ActionCable.server => '/cable'

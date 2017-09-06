@@ -1,4 +1,3 @@
-- if @target.errors != undefined && @target.errors.length > 0
-  - @target.errors.full_messages.forEach (item, i, arr) ->
-      p item
-      br
+- @errors.forEach (item, i, arr) ->
+    == decodeURIComponent(item)
+    br

@@ -1,17 +1,16 @@
 div id="question-#{@question.id}"
-  p
-    = @question.title
-    br
-    = @question.body
-    br
-    div id="question-#{@question.id}-rating" Rating: #{@rating}
-    br
+  = @question.title
+  br
+  = @question.body
+  br
+  div id="question-#{@question.id}-rating" Rating: #{@rating}
+  br
 
-    - if @user_id != gon.user_id
-      div id="question-#{@question.id}-vote"
-        == JST["vote_buttons"]({ votable: @question, votable_type: 'Question' })
+  - if @user_id != gon.user_id
+    div id="question-#{@question.id}-vote"
+      == JST["vote_buttons"]({ votable: @question, votable_type: 'Question' })
 
-      div id="question-#{@question.id}-vote-result"
+    div id="question-#{@question.id}-vote-result"
 
   - if @user_id == gon.user_id
     a.edit-question-link href="#" data-question-id="#{@question.id}" Edit
