@@ -48,13 +48,17 @@ $ ->
     $('#comment-answer-' + result.commentable_id + '-errors').html(JST['templates/error_messages']({ errors: result.errors }))
   )
 
-  App.cable.subscriptions.create('AnswersChannel', {
-    connected: ->
-      console.log 'Connected to answers!'
-      @perform 'follow'
-    ,
+  if gon.question_id
+    App.cable.subscriptions.create({
+      channel: 'AnswersChannel',
+      question_id: gon.question_id
+    }, {
+      connected: ->
+        console.log 'Connected to question_' + gon.question_id
+        @perform 'follow'
+      ,
 
-    received: (data) ->
-      console.log data
-      $('.answers').append JST['templates/answer'](data)
-  })
+      received: (data) ->
+        console.log data
+        $('.answers').append JST['templates/answer'](data)
+    })

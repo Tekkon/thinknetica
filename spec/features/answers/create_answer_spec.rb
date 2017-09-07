@@ -8,6 +8,7 @@ feature 'User can Create on the question page', %q{
 
   given(:user) { create(:user) }
   given(:question) { create(:question, user: user) }
+  given(:another_question) { create(:question, user: user) }
 
   context 'Authenticated user' do
     scenario 'creates an answer', js: true do
@@ -64,6 +65,32 @@ feature 'User can Create on the question page', %q{
       Capybara.using_session('guest') do
         within '.answers' do
           expect(page).to have_content 'This is my answer.'
+        end
+      end
+    end
+
+    scenario "answer not appears on other questions's page", js: true do
+      Capybara.using_session('user') do
+        sign_in(user)
+        visit question_path question
+      end
+
+      Capybara.using_session('guest') do
+        visit question_path another_question
+      end
+
+      Capybara.using_session('user') do
+        fill_in 'Body', with: 'This is my answer.'
+        click_on 'Create'
+
+        within '.answers' do
+          expect(page).to have_content 'This is my answer.'
+        end
+      end
+
+      Capybara.using_session('guest') do
+        within '.answers' do
+          expect(page).to_not have_content 'This is my answer.'
         end
       end
     end

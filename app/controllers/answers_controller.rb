@@ -54,8 +54,8 @@ class AnswersController < ApplicationController
     return if @answer.errors.any?
 
     ActionCable.server.broadcast(
-        'answers',
-        { answer: @answer.as_json(include: { attachments: { methods: :filename } }), question: @question, rating: @answer.rating, user_id: current_user.id }
+      "question_#{@question.id}",
+      { answer: @answer.as_json(include: { attachments: { methods: :filename } }), question: @question, rating: @answer.rating, user_id: current_user.id }
     )
   end
 

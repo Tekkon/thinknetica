@@ -9,6 +9,8 @@ feature 'Comment answer', %q{
   given(:user) { create(:user) }
   given!(:question) { create(:question, user: user) }
   given!(:answer) { create(:answer, question: question, user: user) }
+  given!(:another_question) { create(:question, user: user) }
+  given!(:another_answer) { create(:answer, question: another_question, user: user) }
 
   context 'Authenticated user' do
     before do
@@ -39,7 +41,7 @@ feature 'Comment answer', %q{
   end
 
   context 'multiple sessions' do
-    scenario "answer appears on another user's page", js: true do
+    scenario "comment appears on another user's page", js: true do
       Capybara.using_session('user') do
         sign_in(user)
         visit question_path question
@@ -63,6 +65,31 @@ feature 'Comment answer', %q{
         within "#answer-#{answer.id}" do
           expect(page).to have_content 'New Comment'
         end
+      end
+    end
+
+    scenario "comment doesn't appear on another question's page", js: true do
+      Capybara.using_session('user') do
+        sign_in(user)
+        visit question_path question
+      end
+
+      Capybara.using_session('guest') do
+        visit question_path another_question
+      end
+
+      Capybara.using_session('user') do
+        within "#answer-#{answer.id}" do
+          click_on 'Comment'
+          fill_in 'Comment', with: 'New Comment'
+          click_on 'Add comment'
+
+          expect(page).to have_content 'New Comment'
+        end
+      end
+
+      Capybara.using_session('guest') do
+        expect(page).to_not have_content 'New Comment'
       end
     end
   end

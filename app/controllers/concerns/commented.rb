@@ -38,9 +38,10 @@ module Commented
   def publish_comment
     return if @comment.errors.any?
 
-    ActionCable.server.broadcast(
-        'comments',
-        { comment: @comment.as_json(include: :user) }
-    )
+    result = { comment: @comment.as_json(include: :user) }
+
+    id = @comment.commentable.try(:question) ? @comment.commentable.question.id : @comment.commentable.id
+    ActionCable.server.broadcast("comments/question_#{id}", result)
+    ActionCable.server.broadcast("comments", { comment: @comment.as_json(include: :user) })
   end
 end
