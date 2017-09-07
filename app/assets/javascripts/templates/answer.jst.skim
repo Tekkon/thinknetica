@@ -10,6 +10,10 @@ div id="answer-#{@answer.id}"
 
     div id="answer-#{@answer.id}-vote-result"
 
+  br
+
+  div id="answer-#{@answer.id}-comments"
+
   - if @answer.attachments.length > 0
     div id="answer-#{@answer.id}-attachments"
       label for="answer_attachments" Attachments:
@@ -41,3 +45,7 @@ div id="answer-#{@answer.id}"
       textarea name="answer[body]" id="answer_body" #{@answer.body}
       br
       input type="submit" name="commit" value="Save" data-disable-with="Save"
+
+  == JST['templates/comment_form']({ commentable: @answer, commentable_type: 'answer' })
+
+br

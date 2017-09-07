@@ -1,3 +1,4 @@
-- @errors.forEach (item, i, arr) ->
+- if @errors != undefined
+  - @errors.forEach (item, i, arr) ->
     == decodeURIComponent(item)
     br
