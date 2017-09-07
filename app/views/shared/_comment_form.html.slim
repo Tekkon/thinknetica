@@ -1,0 +1,12 @@
+- if user_signed_in?
+  br
+  - @commentable_type = commentable.class.to_s.downcase
+  = link_to 'Comment', '', class: "comment-#{@commentable_type}-link", id: "comment-#{@commentable_type}-link-#{commentable.id}", data: { commentable_id: commentable.id }
+
+  - @comment ||= commentable.comments.build
+  = form_for [commentable, @comment], remote: true, url: polymorphic_path([:comment, commentable]), html: { id: "comment-#{@commentable_type}-#{commentable.id}", class: "new-#{@commentable_type}-comment" } do |f|
+    div id="comment-#{@commentable_type}-#{commentable.id}-errors"
+    = f.label :body, 'Comment'
+    = f.text_field :body
+    br
+    = f.submit 'Add comment'

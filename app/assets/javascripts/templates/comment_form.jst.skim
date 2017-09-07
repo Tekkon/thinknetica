@@ -1,0 +1,9 @@
+br
+a href="#" id="comment-#{@commentable_type}-link-#{@commentable.id}" class="comment-#{@commentable_type}-link" data-commentable-id="#{@commentable.id}" Comment
+
+form id="comment-#{@commentable_type}-#{@commentable.id}" class="new-#{@commentable_type}-comment" action="/#{@commentable_type}s/#{@commentable.id}/comment" accept-charset="UTF-8" data-remote="true" method="post"
+  div id="comment-#{@commentable_type}-#{@commentable.id}-errors"
+  label for="comment_body" Comment
+  input type="text" name="comment[body]" id="comment_body"
+  br
+  input type="submit" name="commit" value="Add comment" data-disable-with="Add comment"

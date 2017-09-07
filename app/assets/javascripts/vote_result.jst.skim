@@ -1,7 +1,0 @@
-- if @vote.vote_type == 1
-  label You have voted for this #{@vote.votable_type.toLowerCase()}.
-- else
-  label You have voted against this #{@vote.votable_type.toLowerCase()}.
-br
-
-<a href="#{@vote.votable_type.toLowerCase()}s/#{@vote.votable_id}/revote" data-remote="true" data-method="post" class="revote-link">Revote</a>

@@ -9,15 +9,13 @@ shared_examples "voted" do
     context "Not votable's author" do
       sign_in_user
 
-      context 'with valid attributes' do
-        it 'saves the new vote in the database' do
-          expect { post :vote_for, params: { id: votable }, format: :json }.to change(Vote, :count).by(1)
-        end
+      it 'saves the new vote in the database' do
+        expect { post :vote_for, params: { id: votable }, format: :json }.to change(Vote, :count).by(1)
+      end
 
-        it 'renders create_voted vote' do
-          post :vote_for, params: { id: votable }, format: :json
-          expect(JSON.parse(response.body)['vote']['id']).to eq Vote.first.id
-        end
+      it 'renders create_voted vote' do
+        post :vote_for, params: { id: votable }, format: :json
+        expect(JSON.parse(response.body)['vote']['id']).to eq Vote.first.id
       end
     end
 
