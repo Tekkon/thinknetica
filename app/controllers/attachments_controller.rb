@@ -1,11 +1,20 @@
 class AttachmentsController < ApplicationController
-  def destroy
-    @attachment = Attachment.find(params[:id])
+  respond_to :js
 
-    if current_user.author_of?(@attachment.attachmentable)
-      @attachment.destroy
-    else
-      flash[:notice] = 'Only author of question or answer can remove attachment.'
-    end
+  before_action :find_attachment, only: :destroy
+
+  def destroy
+    flash[:notice] = 'Only author of question or answer can remove attachment.' unless is_attachmentable_author?
+    respond_with @attachment.destroy if is_attachmentable_author?
+  end
+
+  private
+
+  def is_attachmentable_author?
+    current_user.author_of?(@attachment.attachmentable)
+  end
+
+  def find_attachment
+    @attachment = Attachment.find(params[:id])
   end
 end

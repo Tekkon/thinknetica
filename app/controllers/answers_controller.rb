@@ -2,50 +2,29 @@ class AnswersController < ApplicationController
   include Voted
   include Commented
 
-  respond_to :html, :js
+  respond_to :js
 
   before_action :authenticate_user!
   before_action :find_question, only: [:new, :create]
-  after_action :publish_answer, only: [:create]
+  before_action :load_answer, only: [:update, :destroy, :mark_favorite]
+  after_action :publish_answer, only: :create
 
   def create
-    @answer = @question.answers.new(answer_params)
-    @answer.user = current_user
-
-    @answer.save
+    respond_with(@answer = @question.answers.create(answer_params))
   end
 
   def destroy
-    @answer = Answer.find(params[:id])
-
-    if current_user.author_of?(@answer)
-      @answer.destroy
-      flash[:notice] = 'Your answer is deleted successfully.'
-    else
-      flash[:notice] = 'You can delete only yours answers.'
-    end
+    respond_with @answer.destroy if is_answer_author?
   end
 
   def update
-    @answer = Answer.find(params[:id])
-    @question = @answer.question
-
-    if current_user.author_of?(@answer)
-      @answer.update(answer_params)
-    else
-      flash[:notice] = 'You can update only your answers.'
-    end
+    respond_with @answer.update(answer_params) if is_answer_author?
   end
 
   def mark_favorite
-    @answer = Answer.find(params[:id])
-    @question = @answer.question
-
-    if current_user.author_of?(@question)
-      @answer.mark_favorite
-    else
-      flash[:notice] = 'Only the author of the question can choose favorite answer.'
-    end
+    is_question_author = current_user.author_of?(@question)
+    flash[:notice] = 'Only the author of the question can choose favorite answer.' unless is_question_author
+    respond_with @answer.mark_favorite if is_question_author
   end
 
   private
@@ -59,8 +38,19 @@ class AnswersController < ApplicationController
     )
   end
 
+  def is_answer_author?
+    is_author = current_user.author_of?(@answer)
+    flash[:notice] = 'You can update or delete only your answers.' unless is_author
+    is_author
+  end
+
+  def load_answer
+    @answer = Answer.find(params[:id])
+    @question = @answer.question
+  end
+
   def answer_params
-    params.require(:answer).permit(:body, attachments_attributes: [:file])
+    params.require(:answer).permit(:body, attachments_attributes: [:file]).merge(user: current_user)
   end
 
   def find_question

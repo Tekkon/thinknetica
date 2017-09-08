@@ -2,6 +2,7 @@ module Voted
   extend ActiveSupport::Concern
 
   included do
+    respond_to :json, only: [:vote_for, :vote_against, :revote]
     before_action :load_votable, only: [:vote_for, :vote_against, :revote]
   end
 

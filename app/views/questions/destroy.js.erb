@@ -1,0 +1,5 @@
+<% if @question.errors.present? %>
+  $('#question-<%= @question.id %>-errors').html('<%= j render 'shared/error_messages', target: @question %>');
+<% else %>
+  $('#question-<%= @question.id %>').html('');
+<% end %>

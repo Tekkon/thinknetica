@@ -2,8 +2,9 @@ module Commented
   extend ActiveSupport::Concern
 
   included do
-    before_action :load_commentable, only: [:comment]
-    after_action :publish_comment, only: [:comment]
+    respond_to :json, only: :comment
+    before_action :load_commentable, only: :comment
+    after_action :publish_comment, only: :comment
   end
 
   def comment
@@ -32,7 +33,7 @@ module Commented
   end
 
   def comment_params
-    params.require(:comment).permit(:body)
+    params.require(:comment).permit(:body).merge(user: current_user)
   end
 
   def publish_comment

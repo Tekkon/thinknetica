@@ -37,10 +37,6 @@ RSpec.describe QuestionsController, type: :controller do
     it 'renders show view' do
       expect(response).to render_template :show
     end
-
-    it 'builds new attachment for answer' do
-      expect(assigns(:answer).attachments.first).to be_a_new(Attachment)
-    end
   end
 
   describe 'GET #new' do
@@ -49,10 +45,6 @@ RSpec.describe QuestionsController, type: :controller do
 
     it 'assigns a new question to @question' do
       expect(assigns(:question)).to be_a_new(Question)
-    end
-
-    it 'builds new attachment for question' do
-      expect(assigns(:question).attachments.first).to be_a_new(Attachment)
     end
 
     it 'renders new view' do
@@ -154,19 +146,19 @@ RSpec.describe QuestionsController, type: :controller do
       before { sign_in_the_user(user) }
 
       it 'deletes the question' do
-        expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
+        expect { delete :destroy, params: { id: question }, format: :js }.to change(Question, :count).by(-1)
       end
     end
 
     context 'user is not the author of the question' do
       it 'not deletes the question' do
-        expect { delete :destroy, params: { id: question } }.to_not change(Question, :count)
+        expect { delete :destroy, params: { id: question }, format: :js }.to_not change(Question, :count)
       end
     end
 
     it 'redirects to index view' do
-      delete :destroy, params: { id: question }
-      expect(response).to redirect_to questions_path
+      delete :destroy, params: { id: question }, format: :js
+      expect(response).to render_template :destroy
     end
   end
 
