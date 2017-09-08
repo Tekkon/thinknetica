@@ -9,7 +9,7 @@ feature 'User can delete his question', %q{
   given(:user) { create(:user) }
   given(:question) { create(:question, user_id: user.id) }
 
-  scenario 'Authenticated user tries to delete his question' do
+  scenario 'Authenticated user tries to delete his question', js: true do
     sign_in(user)
 
     question
@@ -18,7 +18,6 @@ feature 'User can delete his question', %q{
 
     expect(page).to_not have_content question.title
     expect(page).to_not have_content question.body
-    expect(page).to have_content 'Your question is deleted successfully.'
   end
 
   scenario 'Authenticated user tries to delete another\'s question' do

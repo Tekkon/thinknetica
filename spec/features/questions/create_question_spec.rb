@@ -20,7 +20,7 @@ feature 'Create question', %q{
 
       expect(page).to have_content 'Test question'
       expect(page).to have_content 'test text'
-      expect(page).to have_content 'Your question is created successfully.'
+      expect(page).to have_content 'Your question was successfully created'
     end
 
     scenario 'creates question with invalid parameters' do
@@ -64,7 +64,7 @@ feature 'Create question', %q{
 
         expect(page).to have_content 'Test question'
         expect(page).to have_content 'test text'
-        expect(page).to have_content 'Your question is created successfully.'
+        expect(page).to have_content 'Your question was successfully created'
       end
 
       Capybara.using_session('guest') do

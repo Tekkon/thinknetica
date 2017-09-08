@@ -28,7 +28,7 @@ h2 Answers
       = f.text_field :body
     p
       #attachments
-        = f.fields_for :attachments do |a|
+        = f.fields_for :attachments, @answer.attachments.build do |a|
           = render 'attachment_fields', f: a
         .links
           = link_to_add_association 'add attachment', f, :attachments
