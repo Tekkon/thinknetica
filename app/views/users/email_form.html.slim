@@ -1,0 +1,9 @@
+p= 'Please, fill in your email.'
+p
+  - user.email = nil
+  = form_for user, method: :post, url: send_finish_signup_email_path do |f|
+    = f.hidden_field :id
+    = f.label :email
+    = f.email_field :email
+    br
+    = f.submit 'Send'

@@ -27,7 +27,8 @@ Rails.application.routes.draw do
   resources :answers, concerns: [:commented], only: [:comment]
   resources :attachments, only: [:destroy]
 
-  patch 'users/auth/change_email' => 'users_auth#change_email'
+  match '/users/:id/finish_signup' => 'users#finish_signup', via: [:get, :patch], as: :finish_signup
+  post '/users/send_finish_signup_email' => 'users#send_finish_signup_email', as: :send_finish_signup_email
 
   mount ActionCable.server => '/cable'
 end

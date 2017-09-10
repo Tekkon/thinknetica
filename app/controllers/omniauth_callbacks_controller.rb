@@ -16,7 +16,7 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
       authenticate('Twitter')
     else
       @user = User.create_user_and_auth(Faker::Internet.email, auth.provider, auth.uid)
-      render partial: 'shared/email_form', locals: { user: @user }
+      render 'users/email_form', locals: { user: @user }, layout: false
     end
   end
 

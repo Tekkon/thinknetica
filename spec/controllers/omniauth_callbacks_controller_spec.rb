@@ -137,9 +137,9 @@ RSpec.describe OmniauthCallbacksController, type: :controller do
         expect(assigns(:user)).to eq user
       end
 
-      it 'renders email_form partial' do
+      it 'renders email_form template' do
         post :twitter
-        expect(response).to render_template 'shared/_email_form'
+        expect(response).to render_template 'users/email_form'
       end
 
       it 'creates a user' do

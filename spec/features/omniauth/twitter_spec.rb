@@ -18,9 +18,8 @@ feature 'Authentication with twitter', %q{
       fill_in 'Email', with: 'test@email.com'
       click_on 'Send'
 
-      expect(current_path).to eq root_path
-      expect(page).to have_content 'Successfully authenticated from Twitter account.'
-      expect(page).to have_content 'Sign out'
+      expect(current_path).to eq send_finish_signup_email_path
+      expect(page).to have_content 'You must confirm your email. The instructions was sent to your email.'
     end
   end
 

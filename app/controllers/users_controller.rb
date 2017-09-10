@@ -1,7 +1,7 @@
-class UsersAuthController < ApplicationController
-  def change_email
-    @user = User.find(user_params[:id])
-    @another_user = User.find_by_email(user_params[:email])
+class UsersController < ApplicationController
+  def finish_signup
+    @user = User.find(params[:id])
+    @another_user = User.find_by_email(params[:email])
 
     auth = @user.authorizations.first
 
@@ -10,12 +10,18 @@ class UsersAuthController < ApplicationController
       @user.destroy
       user = @another_user
     else
-      @user.update(user_params)
+      @user.update(email: params[:email])
       user = @user
     end
 
     sign_in_and_redirect user, event: :authentication
     flash[:notice] = "Successfully authenticated from #{auth.provider.capitalize} account."
+  end
+
+  def send_finish_signup_email
+    OmniauthMailer.finish_signup_email(user_params[:id], user_params[:email]).deliver_now
+
+    render 'email_confirmation', layout: false
   end
 
   private
