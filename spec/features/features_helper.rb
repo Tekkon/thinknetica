@@ -7,6 +7,7 @@ RSpec.configure do |config|
 
   config.include FeaturesMacros, type: :feature
   config.include WaitForAjax, type: :feature
+
   config.use_transactional_fixtures = false
 
   config.before(:suite) do

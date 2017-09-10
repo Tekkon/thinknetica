@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, controllers: { omniauth_callbacks: 'omniauth_callbacks' }
+
   root to: "questions#index"
 
   concern :voted do
@@ -25,6 +26,8 @@ Rails.application.routes.draw do
   resources :answers, concerns: [:voted], only: [:create_vote, :destroy_vote]
   resources :answers, concerns: [:commented], only: [:comment]
   resources :attachments, only: [:destroy]
+
+  patch 'users/auth/change_email' => 'users_auth#change_email'
 
   mount ActionCable.server => '/cable'
 end
