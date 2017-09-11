@@ -63,7 +63,7 @@ RSpec.describe UsersController, type: :controller do
 
   describe 'POST #send_finish_signup_email' do
     before do
-      post :send_finish_signup_email, params: { user: { id: user, email: 'new@email.com' } }
+      post :send_finish_signup_email, params: { id: user, user: { email: 'new@email.com' } }
     end
 
     it 'sends email' do

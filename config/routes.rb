@@ -28,7 +28,7 @@ Rails.application.routes.draw do
   resources :attachments, only: [:destroy]
 
   match '/users/:id/finish_signup' => 'users#finish_signup', via: [:get, :patch], as: :finish_signup
-  post '/users/send_finish_signup_email' => 'users#send_finish_signup_email', as: :send_finish_signup_email
+  post '/users/:id/send_finish_signup_email' => 'users#send_finish_signup_email', as: :send_finish_signup_email
 
   mount ActionCable.server => '/cable'
 end

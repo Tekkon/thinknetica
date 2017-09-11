@@ -1,7 +1,6 @@
 p= 'Please, fill in your email.'
 p
-  = form_for user, method: :post, url: send_finish_signup_email_path do |f|
-    = f.hidden_field :id
+  = form_for user, method: :post, url: send_finish_signup_email_path(user) do |f|
     = f.label :email
     = f.email_field :email
     br
