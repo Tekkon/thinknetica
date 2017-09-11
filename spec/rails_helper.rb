@@ -60,6 +60,9 @@ RSpec.configure do |config|
   config.include Devise::TestHelpers, type: :controller
   config.extend ControllerMacros, type: :controller
   config.include ControllersHelper, type: :controller
+  config.include OmniuathMacros
+
+  OmniAuth.config.test_mode = true
 end
 
 Shoulda::Matchers.configure do |config|

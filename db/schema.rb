@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170907173012) do
+ActiveRecord::Schema.define(version: 20170908151333) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,6 +33,15 @@ ActiveRecord::Schema.define(version: 20170907173012) do
     t.integer  "attachmentable_id"
     t.string   "attachmentable_type"
     t.index ["attachmentable_id", "attachmentable_type"], name: "index_attachments_on_attachmentable_id_and_attachmentable_type", using: :btree
+  end
+
+  create_table "authorizations", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "provider"
+    t.string   "uid"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_authorizations_on_user_id", using: :btree
   end
 
   create_table "comments", force: :cascade do |t|
@@ -81,4 +90,5 @@ ActiveRecord::Schema.define(version: 20170907173012) do
     t.index ["votable_id", "votable_type"], name: "index_votes_on_votable_id_and_votable_type", using: :btree
   end
 
+  add_foreign_key "authorizations", "users"
 end

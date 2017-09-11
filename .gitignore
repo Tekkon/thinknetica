@@ -23,3 +23,5 @@
 config/database.yml
 .idea
 /public
+config/environments/*
+config/secrets.yml
