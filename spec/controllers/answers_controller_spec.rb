@@ -56,17 +56,22 @@ RSpec.describe AnswersController, type: :controller do
       it 'deletes the answer' do
         expect { delete :destroy, params: { question_id: question, id: answer.id }, format: :js }.to change(Answer, :count).by(-1)
       end
+
+      it 'renders destroy template' do
+        delete :destroy, params: { question_id: question, id: answer.id }, format: :js
+        expect(response).to render_template :destroy
+      end
     end
 
     context 'user is not the author of the answer' do
       it 'not deletes the answer' do
         expect { delete :destroy, params: { question_id: question, id: answer.id }, format: :js }.to_not change(Answer, :count)
       end
-    end
 
-    it 'renders destroy template' do
-      delete :destroy, params: { question_id: question, id: answer.id }, format: :js
-      expect(response).to render_template :destroy
+      it 'redirects to root path' do
+        delete :destroy, params: { question_id: question, id: answer.id }, format: :js
+        expect(response).to redirect_to root_path
+      end
     end
   end
 
@@ -99,6 +104,11 @@ RSpec.describe AnswersController, type: :controller do
         answer.reload
         expect(answer.body).to include 'I really want to know!'
       end
+
+      it 'renders update template' do
+        patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
+        expect(response).to render_template :update
+      end
     end
 
     context "Not answer's author" do
@@ -107,11 +117,11 @@ RSpec.describe AnswersController, type: :controller do
         answer.reload
         expect(answer.body).to include 'I really want to know!'
       end
-    end
 
-    it 'renders update template' do
-      patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
-      expect(response).to render_template :update
+      it 'redirects to root path' do
+        patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
+        expect(response).to redirect_to root_path
+      end
     end
   end
 
@@ -137,10 +147,7 @@ RSpec.describe AnswersController, type: :controller do
         expect(another_answer.favorite).to eq false
       end
 
-      it 'renders mark_favorite template' do
-        put :mark_favorite, id: answer, question_id: question, format: :js
-        expect(response).to render_template :mark_favorite
-      end
+
     end
 
     context "Not question's author" do
@@ -149,11 +156,11 @@ RSpec.describe AnswersController, type: :controller do
         answer.reload
         expect(answer.favorite).to eq false
       end
-    end
 
-    it 'renders mark_favorite template' do
-      put :mark_favorite, id: answer, question_id: question, format: :js
-      expect(response).to render_template :mark_favorite
+      it 'redirect to root path' do
+        put :mark_favorite, id: answer, question_id: question, format: :js
+        expect(response).to redirect_to root_path
+      end
     end
   end
 end

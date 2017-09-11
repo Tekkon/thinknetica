@@ -55,15 +55,31 @@ RSpec.describe QuestionsController, type: :controller do
   describe 'GET #edit' do
     let!(:question) { create(:question, user: user) }
 
-    sign_in_user
-    before { get :edit, params: { id: question } }
+    context "question's author" do
+      before do
+        sign_in_the_user(user)
+        get :edit, params: { id: question }
+      end
 
-    it 'assigns the requested question to @question' do
-      expect(assigns(:question)).to eq question
+      it 'assigns the requested question to @question' do
+        expect(assigns(:question)).to eq question
+      end
+
+      it 'renders edit view' do
+        expect(response).to render_template :edit
+      end
     end
 
-    it 'renders edit view' do
-      expect(response).to render_template :edit
+    context "not question's author" do
+      sign_in_user
+
+      before do
+        get :edit, params: { id: question }
+      end
+
+      it 'redirects to root_path' do
+        expect(response).to redirect_to root_path
+      end
     end
   end
 
@@ -148,17 +164,22 @@ RSpec.describe QuestionsController, type: :controller do
       it 'deletes the question' do
         expect { delete :destroy, params: { id: question }, format: :js }.to change(Question, :count).by(-1)
       end
+
+      it 'redirects to index view' do
+        delete :destroy, params: { id: question }, format: :js
+        expect(response).to render_template :destroy
+      end
     end
 
     context 'user is not the author of the question' do
       it 'not deletes the question' do
         expect { delete :destroy, params: { id: question }, format: :js }.to_not change(Question, :count)
       end
-    end
 
-    it 'redirects to index view' do
-      delete :destroy, params: { id: question }, format: :js
-      expect(response).to render_template :destroy
+      it 'redirects to root view' do
+        delete :destroy, params: { id: question }, format: :js
+        expect(response).to redirect_to root_path
+      end
     end
   end
 

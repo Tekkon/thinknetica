@@ -9,22 +9,22 @@ class AnswersController < ApplicationController
   before_action :load_answer, only: [:update, :destroy, :mark_favorite]
   after_action :publish_answer, only: :create
 
+  authorize_resource
+
   def create
     respond_with(@answer = @question.answers.create(answer_params))
   end
 
   def destroy
-    respond_with @answer.destroy if is_answer_author?
+    respond_with @answer.destroy
   end
 
   def update
-    respond_with @answer.update(answer_params) if is_answer_author?
+    respond_with @answer.update(answer_params)
   end
 
   def mark_favorite
-    is_question_author = current_user.author_of?(@question)
-    flash[:notice] = 'Only the author of the question can choose favorite answer.' unless is_question_author
-    respond_with @answer.mark_favorite if is_question_author
+    respond_with @answer.mark_favorite
   end
 
   private
@@ -36,12 +36,6 @@ class AnswersController < ApplicationController
       "question_#{@question.id}",
       { answer: @answer.as_json(include: { attachments: { methods: :filename } }), question: @question, rating: @answer.rating, user_id: current_user.id }
     )
-  end
-
-  def is_answer_author?
-    is_author = current_user.author_of?(@answer)
-    flash[:notice] = 'You can update or delete only your answers.' unless is_author
-    is_author
   end
 
   def load_answer

@@ -4,4 +4,5 @@ h1 Question list
   = render @questions
 
 br
-=p link_to 'Ask question', new_question_path
+- if can?(:create, Question)
+  =p link_to 'Ask question', new_question_path

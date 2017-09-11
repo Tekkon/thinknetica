@@ -9,6 +9,8 @@ class QuestionsController < ApplicationController
   before_action :build_answer, only: :show
   after_action :publish_question, only: :create
 
+  authorize_resource
+
   def index
     respond_with(@questions = Question.all)
   end
@@ -31,11 +33,11 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    respond_with @question.update(question_params) if is_question_author?
+    respond_with @question.update(question_params)
   end
 
   def destroy
-    respond_with @question.destroy if is_question_author?
+    respond_with @question.destroy
   end
 
   private
@@ -59,12 +61,6 @@ class QuestionsController < ApplicationController
 
   def interpolation_options
     { resource_name: 'Your question' }
-  end
-
-  def is_question_author?
-    is_author = current_user.author_of?(@question)
-    flash[:notice] = 'You can update or delete only your questions.' unless is_author
-    is_author
   end
 
   def question_params
