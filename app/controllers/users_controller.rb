@@ -19,7 +19,7 @@ class UsersController < ApplicationController
   end
 
   def send_finish_signup_email
-    OmniauthMailer.finish_signup_email(user_params[:id], user_params[:email]).deliver_now
+    OmniauthMailer.finish_signup_email(user_params[:id], user_params[:email]).deliver_later
 
     render 'email_confirmation', layout: false
   end
