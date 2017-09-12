@@ -3,12 +3,12 @@ class Api::V1::ProfilesController < ApplicationController
 
   respond_to :json
 
-  def me
-    respond_with current_resource_owner
+  def index
+    respond_with User.where('id != ?', current_resource_owner.id)
   end
 
-  def all
-    respond_with User.where('id != ?', current_resource_owner.id)
+  def me
+    respond_with current_resource_owner
   end
 
   protected
