@@ -26,9 +26,9 @@ RSpec.describe AttachmentsController, type: :controller do
         expect { delete :destroy, params: { id: attachment }, format: :js }.to_not change(Attachment, :count)
       end
 
-      it 'redirect to root path' do
+      it 'renders forbidden' do
         delete :destroy, params: { id: attachment }, format: :js
-        expect(response).to redirect_to root_path
+        expect(response.status).to eq 403
       end
     end
   end

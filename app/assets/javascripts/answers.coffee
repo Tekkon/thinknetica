@@ -17,7 +17,11 @@ $ ->
     $('#answer-' + result.vote.votable_id + '-rating').html('Rating: ' + result.rating)
   ).on('ajax:error', '.rb-vote', (e, data, status, xhr) ->
     result = $.parseJSON(data.responseText)
-    $('#answer-' + result.vote.votable_id + '-vote').append(result.error)
+
+    if (status == 403)
+      $('.alert').html(result.error)
+    else
+      $('#answer-' + result.vote.votable_id + '-vote').append(result.error)
   )
 
   $(document).on('ajax:success', '.revote-link', (e, data, status, xhr) ->
@@ -27,7 +31,11 @@ $ ->
     $('#answer-' + result.vote.votable_id + '-rating').html('Rating: ' + result.rating)
   ).on('ajax:error', '.revote-link', (e, data, status, xhr) ->
     result = $.parseJSON(data.responseText)
-    $('#answer-' + result.vote.votable_id + '-vote-result').append(result.error)
+
+    if (status == 403)
+      $('.alert').html(result.error)
+    else
+      $('#answer-' + result.vote.votable_id + '-vote-result').append(result.error)
   )
 
   $(document).on('click', '.comment-answer-link', (e) ->
@@ -45,7 +53,11 @@ $ ->
     $('#comment_body').val('')
   ).on('ajax:error', '.new-answer-comment', (e, data, status, xhr) ->
     result = $.parseJSON(data.responseText)
-    $('#comment-answer-' + result.commentable_id + '-errors').html(JST['templates/error_messages']({ errors: result.errors }))
+
+    if (status == 403)
+      $('.alert').html(result.error)
+    else
+      $('#comment-answer-' + result.commentable_id + '-errors').html(JST['templates/error_messages']({ errors: result.errors }))
   )
 
   if gon.question_id

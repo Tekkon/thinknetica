@@ -68,9 +68,9 @@ RSpec.describe AnswersController, type: :controller do
         expect { delete :destroy, params: { question_id: question, id: answer.id }, format: :js }.to_not change(Answer, :count)
       end
 
-      it 'redirects to root path' do
+      it 'renders forbidden' do
         delete :destroy, params: { question_id: question, id: answer.id }, format: :js
-        expect(response).to redirect_to root_path
+        expect(response.status).to eq 403
       end
     end
   end
@@ -118,9 +118,9 @@ RSpec.describe AnswersController, type: :controller do
         expect(answer.body).to include 'I really want to know!'
       end
 
-      it 'redirects to root path' do
+      it 'renders forbidden' do
         patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
-        expect(response).to redirect_to root_path
+        expect(response.status).to eq 403
       end
     end
   end
@@ -157,9 +157,9 @@ RSpec.describe AnswersController, type: :controller do
         expect(answer.favorite).to eq false
       end
 
-      it 'redirect to root path' do
+      it 'renders forbidden' do
         put :mark_favorite, id: answer, question_id: question, format: :js
-        expect(response).to redirect_to root_path
+        expect(response.status).to eq 403
       end
     end
   end

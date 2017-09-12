@@ -176,9 +176,9 @@ RSpec.describe QuestionsController, type: :controller do
         expect { delete :destroy, params: { id: question }, format: :js }.to_not change(Question, :count)
       end
 
-      it 'redirects to root view' do
+      it 'renders forbidden' do
         delete :destroy, params: { id: question }, format: :js
-        expect(response).to redirect_to root_path
+        expect(response.status).to eq 403
       end
     end
   end
