@@ -61,6 +61,7 @@ RSpec.configure do |config|
 
   config.include FactoryGirl::Syntax::Methods
   config.include Devise::TestHelpers, type: :controller
+  config.include JsonSpec::Helpers
   config.extend ControllerMacros, type: :controller
   config.include ControllersHelper, type: :controller
   config.include OmniuathMacros
@@ -74,4 +75,3 @@ Shoulda::Matchers.configure do |config|
     with.library :rails
   end
 end
-
