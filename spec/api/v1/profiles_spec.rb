@@ -52,8 +52,9 @@ describe 'Profile API' do
     end
 
     context 'authorized' do
-      let!(:me) { create(:user) }
+      let(:me) { create(:user) }
       let!(:users) { create_list(:user, 2) }
+      let(:user) { users.first }
       let(:access_token) { create(:access_token, resource_owner_id: me.id) }
 
       before { get '/api/v1/profiles', format: :json, access_token: access_token.token  }
@@ -63,9 +64,7 @@ describe 'Profile API' do
       end
 
       it 'renders list of users' do
-        items = parse_json(response.body)
-        expect(items[0]['id']).to eq users[0].id
-        expect(items[1]['id']).to eq users[1].id
+        expect(response.body).to have_json_size(2)
       end
 
       it 'does not render authenticated user' do
@@ -74,27 +73,15 @@ describe 'Profile API' do
         end
       end
 
-      %w(id email admin).each do |attr|
+      %w(id email admin created_at updated_at).each do |attr|
         it "contains #{attr}" do
-          items = parse_json(response.body)
-          expect(items[0]["#{attr}"]).to eq users[0].send(attr.to_sym)
-          expect(items[1]["#{attr}"]).to eq users[1].send(attr.to_sym)
-        end
-      end
-
-      %w(created_at updated_at).each do |attr|
-        it "contains #{attr}" do
-          items = parse_json(response.body)
-          expect(items[0]["#{attr}"].to_json).to eq users[0].send(attr.to_sym).to_json
-          expect(items[1]["#{attr}"].to_json).to eq users[1].send(attr.to_sym).to_json
+          expect(response.body).to be_json_eql(user.send(attr.to_sym).to_json).at_path("0/#{attr}")
         end
       end
 
       %w(password encrypted_password).each do |attr|
         it "does not contain #{attr}" do
-          parse_json(response.body).each do |item|
-            expect(item["#{attr}"]).to eq nil
-          end
+          expect(parse_json(response.body).first["#{attr}"]).to eq nil
         end
       end
     end
