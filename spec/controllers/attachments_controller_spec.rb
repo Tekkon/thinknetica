@@ -26,9 +26,9 @@ RSpec.describe AttachmentsController, type: :controller do
         expect { delete :destroy, params: { id: attachment }, format: :js }.to_not change(Attachment, :count)
       end
 
-      it 'renders template destroy' do
+      it 'renders forbidden' do
         delete :destroy, params: { id: attachment }, format: :js
-        expect(response).to render_template :destroy
+        expect(response.status).to eq 403
       end
     end
   end
