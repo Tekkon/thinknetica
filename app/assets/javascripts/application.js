@@ -15,6 +15,7 @@
 //= require jquery.remotipart
 //= require cocoon
 //= require action_cable
+//= require twitter/bootstrap
 //= require turbolinks
 //= require_tree .
 

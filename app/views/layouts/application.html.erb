@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>Thinknetica</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <%= Gon::Base.render_data %>
     <%= stylesheet_link_tag "application", :media => "all" %>
     <%= javascript_include_tag 'application' %>
@@ -10,29 +11,30 @@
   </head>
 
   <body>
-    <p class="notice"><%= notice %></p>
-    <p class="alert"><%= alert %></p>
+    <div class="main container">
+      <div class="notice"><%= notice %></div>
+      <div class="alert"><%= alert %></div>
 
-    <ul>
-      <% if user_signed_in? %>
-        <li>
-          <%= link_to 'Sign out', destroy_user_session_path, method: :delete %>
-        </li>
-      <% else %>
-        <% unless current_page?(new_user_session_path) %>
-          <li>
-            <%= link_to 'Sign in', new_user_session_path %>
-          </li>
+      <ul>
+        <% if user_signed_in? %>
+            <li>
+              <%= link_to 'Sign out', destroy_user_session_path, method: :delete %>
+            </li>
+        <% else %>
+            <% unless current_page?(new_user_session_path) %>
+                <li>
+                  <%= link_to 'Sign in', new_user_session_path %>
+                </li>
+            <% end %>
+
+            <% unless current_page?(new_user_registration_path) %>
+                <li>
+                  <%= link_to 'Sign up', new_user_registration_path %>
+                </li>
+            <% end %>
         <% end %>
-
-        <% unless current_page?(new_user_registration_path) %>
-          <li>
-            <%= link_to 'Sign up', new_user_registration_path %>
-          </li>
-        <% end %>
-      <% end %>
-    </ul>
-
-    <%= yield %>
+      </ul>
+      <%= yield %>
+    </div>
   </body>
 </html>

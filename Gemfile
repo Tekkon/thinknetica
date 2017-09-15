@@ -34,6 +34,7 @@ gem 'bcrypt', '3.1.11', platforms: [:ruby, :x64_mingw, :mingw]
 # Use Capistrano for deployment
 gem 'capistrano-rails', group: :development
 
+gem 'twitter-bootstrap-rails', git: 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
 gem 'slim-rails'
 gem 'devise'
 gem 'carrierwave'
