@@ -49,7 +49,7 @@ gem 'faker'
 gem 'cancancan'
 #gem 'pundit'
 gem 'doorkeeper'
-gem 'active_model_serializers'
+gem 'active_model_serializers', '~> 0.10.6'
 gem 'oj'
 gem 'oj_mimic_json'
 
@@ -57,6 +57,7 @@ group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
   gem 'rspec-rails'
+  gem 'rspec'
   gem 'factory_girl_rails'
   gem 'capybara'
   gem 'rails-controller-testing'

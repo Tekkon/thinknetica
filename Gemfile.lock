@@ -315,7 +315,7 @@ PLATFORMS
   x86-mingw32
 
 DEPENDENCIES
-  active_model_serializers
+  active_model_serializers (~> 0.10.6)
   bcrypt (= 3.1.11)
   byebug
   cancancan
@@ -348,6 +348,7 @@ DEPENDENCIES
   redis (~> 3.0)
   remotipart
   responders
+  rspec
   rspec-rails
   sass-rails (~> 5.0)
   shoulda-matchers!
