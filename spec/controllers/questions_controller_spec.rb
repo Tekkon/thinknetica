@@ -73,9 +73,7 @@ RSpec.describe QuestionsController, type: :controller do
     context "not question's author" do
       sign_in_user
 
-      before do
-        get :edit, params: { id: question }
-      end
+      before { get :edit, params: { id: question } }
 
       it 'redirects to root_path' do
         expect(response).to redirect_to root_path
@@ -87,30 +85,23 @@ RSpec.describe QuestionsController, type: :controller do
     sign_in_user
 
     context 'with valid attributes' do
-      it 'saves the new question in the database' do
-        expect { post :create, params: { question: attributes_for(:question) } }.to change(Question, :count).by(1)
-      end
+      let(:request) { post :create, params: { question: attributes_for(:question) } }
 
-      it 'sets a current_user to the new question' do
-        sign_in_the_user(user)
-        post :create, params: { question: attributes_for(:question) }
-        expect(assigns(:question).user_id).to eq user.id
-      end
+      it_behaves_like 'savable'
 
       it 'redirects to show view' do
-        post :create, params: { question: attributes_for(:question) }
+        request
         expect(response).to redirect_to question_path(assigns(:question))
       end
     end
 
     context 'with invalid attributes' do
-      it 'does not save the question' do
-        expect { post :create, params: { question: attributes_for(:invalid_question) } }.to_not change(Question, :count)
-      end
+      let(:request) { post :create, params: { question: attributes_for(:invalid_question) } }
 
-      it 're-renders new view' do
-        post :create, params: { question: attributes_for(:invalid_question) }
-        expect(response).to render_template :new
+      it_behaves_like 'non-savable'
+
+      def template
+        :new
       end
     end
   end
@@ -143,7 +134,7 @@ RSpec.describe QuestionsController, type: :controller do
 
     it 'not changes question if user is not the author of the question' do
       patch :update, id: another_question, question: { title: 'new title', body: 'new body' }, format: :js
-      question.reload
+      another_question.reload
       expect(another_question.title).to include 'What happened write after the big bang?'
       expect(another_question.body).to include 'I really want to know!'
     end
@@ -159,28 +150,21 @@ RSpec.describe QuestionsController, type: :controller do
     sign_in_user
 
     context 'user is the author of the question' do
+      let(:request) { delete :destroy, params: { id: question }, format: :js }
+
       before { sign_in_the_user(user) }
 
-      it 'deletes the question' do
-        expect { delete :destroy, params: { id: question }, format: :js }.to change(Question, :count).by(-1)
-      end
-
-      it 'redirects to index view' do
-        delete :destroy, params: { id: question }, format: :js
-        expect(response).to render_template :destroy
-      end
+      it_behaves_like 'destroyable'
     end
 
     context 'user is not the author of the question' do
-      it 'not deletes the question' do
-        expect { delete :destroy, params: { id: question }, format: :js }.to_not change(Question, :count)
-      end
+      let(:request) { delete :destroy, params: { id: question }, format: :js }
 
-      it 'renders forbidden' do
-        delete :destroy, params: { id: question }, format: :js
-        expect(response.status).to eq 403
-      end
+      it_behaves_like 'non-destroyable'
     end
   end
 
+  def model
+    Question
+  end
 end

@@ -14,30 +14,23 @@ RSpec.describe AnswersController, type: :controller do
     sign_in_user
 
     context 'with valid attributes' do
-      it 'saves the new answer' do
-        expect { post :create, params: { question_id: question, answer: attributes_for(:answer), format: :js } }.to change(question.answers, :count).by(1)
-      end
+      let(:request) { post :create, params: { question_id: question, answer: attributes_for(:answer), format: :js } }
 
-      it 'sets a current_user to the new answer' do
-        sign_in_the_user(user)
-        post :create, params: { question_id: question, answer: attributes_for(:answer), format: :js }
-        expect(assigns(:answer).user_id).to eq user.id
-      end
+      it_behaves_like 'savable'
 
       it 'renders create template' do
-        post :create, params: { question_id: question, answer: attributes_for(:answer), format: :js }
+        request
         expect(response).to render_template :create
       end
     end
 
     context 'with invalid attributes' do
-      it 'does not save the question' do
-        expect { post :create, params: { question_id: question, answer: attributes_for(:invalid_answer), format: :js } }.to_not change(Answer, :count)
-      end
+      let(:request) { post :create, params: { question_id: question, answer: attributes_for(:invalid_answer), format: :js } }
 
-      it 'renders create template' do
-        post :create, params: { question_id: question, answer: attributes_for(:invalid_answer), format: :js }
-        expect(response).to render_template :create
+      it_behaves_like 'non-savable'
+
+      def template
+        :create
       end
     end
   end
@@ -51,27 +44,17 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     context 'user is the author of the answer' do
+      let(:request) { delete :destroy, params: { question_id: question, id: answer.id }, format: :js }
+
       before { sign_in_the_user(user) }
 
-      it 'deletes the answer' do
-        expect { delete :destroy, params: { question_id: question, id: answer.id }, format: :js }.to change(Answer, :count).by(-1)
-      end
-
-      it 'renders destroy template' do
-        delete :destroy, params: { question_id: question, id: answer.id }, format: :js
-        expect(response).to render_template :destroy
-      end
+      it_behaves_like 'destroyable'
     end
 
     context 'user is not the author of the answer' do
-      it 'not deletes the answer' do
-        expect { delete :destroy, params: { question_id: question, id: answer.id }, format: :js }.to_not change(Answer, :count)
-      end
+      let(:request) { delete :destroy, params: { question_id: question, id: answer.id }, format: :js }
 
-      it 'renders forbidden' do
-        delete :destroy, params: { question_id: question, id: answer.id }, format: :js
-        expect(response.status).to eq 403
-      end
+      it_behaves_like 'non-destroyable'
     end
   end
 
@@ -146,8 +129,6 @@ RSpec.describe AnswersController, type: :controller do
         expect(answer.favorite).to eq true
         expect(another_answer.favorite).to eq false
       end
-
-
     end
 
     context "Not question's author" do
@@ -162,5 +143,9 @@ RSpec.describe AnswersController, type: :controller do
         expect(response.status).to eq 403
       end
     end
+  end
+
+  def model
+    Answer
   end
 end
