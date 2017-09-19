@@ -7,6 +7,7 @@ RSpec.describe QuestionsController, type: :controller do
   it_behaves_like 'commented'
 
   let(:user) { create(:user) }
+  let(:model) { Question }
 
   describe 'GET #index' do
     let(:questions) { create_list(:question, 2, user: user) }
@@ -97,12 +98,9 @@ RSpec.describe QuestionsController, type: :controller do
 
     context 'with invalid attributes' do
       let(:request) { post :create, params: { question: attributes_for(:invalid_question) } }
+      let(:template) { :new }
 
       it_behaves_like 'non-savable'
-
-      def template
-        :new
-      end
     end
   end
 
@@ -162,9 +160,5 @@ RSpec.describe QuestionsController, type: :controller do
 
       it_behaves_like 'non-destroyable'
     end
-  end
-
-  def model
-    Question
   end
 end

@@ -4,6 +4,7 @@ RSpec.describe AttachmentsController, type: :controller do
   let(:user) { create(:user) }
   let!(:question) { create(:question, user: user) }
   let!(:attachment) { create(:attachment, attachmentable: question, file: Rails.root.join("spec/spec_helper.rb").open) }
+  let(:model) { Attachment }
 
   describe 'DELETE #destroy' do
     context 'user is the author of the attachmentable' do
@@ -21,9 +22,5 @@ RSpec.describe AttachmentsController, type: :controller do
 
       it_behaves_like 'non-destroyable'
     end
-  end
-
-  def model
-    Attachment
   end
 end

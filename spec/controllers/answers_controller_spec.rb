@@ -9,6 +9,7 @@ RSpec.describe AnswersController, type: :controller do
   let(:user) { create(:user) }
   let!(:question) { create(:question, user: user) }
   let!(:answer) { create(:answer, question: question, user: user) }
+  let(:model) { Answer }
 
   describe 'POST #create' do
     sign_in_user
@@ -26,22 +27,19 @@ RSpec.describe AnswersController, type: :controller do
 
     context 'with invalid attributes' do
       let(:request) { post :create, params: { question_id: question, answer: attributes_for(:invalid_answer), format: :js } }
+      let(:template) { :create }
 
       it_behaves_like 'non-savable'
-
-      def template
-        :create
-      end
     end
   end
 
   describe 'DELETE #destroy' do
     sign_in_user
 
-    before do
-      question
-      answer
-    end
+    # before do
+    #   question
+    #   answer
+    # end
 
     context 'user is the author of the answer' do
       let(:request) { delete :destroy, params: { question_id: question, id: answer.id }, format: :js }
@@ -143,9 +141,5 @@ RSpec.describe AnswersController, type: :controller do
         expect(response.status).to eq 403
       end
     end
-  end
-
-  def model
-    Answer
   end
 end

@@ -7,15 +7,12 @@ describe 'Profile API' do
     context 'authorized' do
       let(:user) { create(:user) }
       let(:access_token) { create(:access_token, resource_owner_id: user.id) }
+      let(:profile_path) { '' }
 
       before { get '/api/v1/profiles/me', format: :json, access_token: access_token.token  }
 
       it_behaves_like 'successable'
       it_behaves_like 'profilable'
-
-      def profile_path
-        ''
-      end
     end
 
     def do_request(options = {})
@@ -31,6 +28,7 @@ describe 'Profile API' do
       let!(:users) { create_list(:user, 2) }
       let(:user) { users.first }
       let(:access_token) { create(:access_token, resource_owner_id: me.id) }
+      let(:profile_path) { '0/' }
 
       before { get '/api/v1/profiles', format: :json, access_token: access_token.token  }
 
@@ -43,18 +41,10 @@ describe 'Profile API' do
           expect(item['id']).to_not eq me.id
         end
       end
-
-      def profile_path
-        '0/'
-      end
     end
 
     def do_request(options = {})
       get '/api/v1/profiles', { format: :json }.merge(options)
-    end
-
-    def profile_path
-      ''
     end
   end
 end

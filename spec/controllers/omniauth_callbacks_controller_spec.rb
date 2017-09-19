@@ -4,9 +4,9 @@ RSpec.describe OmniauthCallbacksController, type: :controller do
   before { @request.env["devise.mapping"] = Devise.mappings[:user] }
 
   describe 'POST #facebook' do
-    before do
-      request.env['omniauth.auth'] = mock_facebook_hash
-    end
+    let(:method) { 'facebook' }
+
+    before { request.env['omniauth.auth'] = mock_facebook_hash }
 
     context 'user has authorization' do
       let!(:user) { create(:user, email: 'test@email.com') }
@@ -42,13 +42,12 @@ RSpec.describe OmniauthCallbacksController, type: :controller do
         User.last
       end
     end
-
-    def method
-      'facebook'
-    end
   end
 
   describe 'POST #twitter' do
+    let(:method) { 'twitter' }
+    let(:user) { User.last }
+
     before do
       request.env['omniauth.auth'] = mock_twitter_hash
     end
@@ -72,14 +71,6 @@ RSpec.describe OmniauthCallbacksController, type: :controller do
         post :twitter
         expect(response).to render_template 'users/email_form'
       end
-
-      def user
-        User.last
-      end
-    end
-
-    def method
-      'twitter'
     end
   end
 end
