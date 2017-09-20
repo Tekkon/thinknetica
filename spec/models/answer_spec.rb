@@ -34,4 +34,31 @@ RSpec.describe Answer, type: :model do
       expect(favorite_answer.favorite).to eq false
     end
   end
+
+  context '#send_question_updates' do
+    let(:question) { create(:question) }
+    let(:answer) { build(:answer, question: question) }
+    let!(:users) { create_list(:user, 2) } #, subscriptions: create_list(:subscription, 1, question: question)) }
+    let!(:subscription1) { create(:subscription, user: users.first, question: question) }
+    let!(:subscription2) { create(:subscription, user: users.last, question: question) }
+
+    it 'triggers send_question_updates on create' do
+      expect(answer).to receive(:send_question_updates)
+      answer.save
+    end
+
+    it 'does not trigger send_question_updates on update' do
+      answer.save
+      expect(answer).to_not receive(:send_question_updates)
+      answer.update(body: 'new answer')
+    end
+
+    it 'sends created answer to subscribers' do
+      users.each do |user|
+        expect(QuestionUpdateJob).to receive(:perform_later).with(user, answer).and_call_original
+      end
+
+      answer.save
+    end
+  end
 end

@@ -3,6 +3,8 @@ class Answer < ApplicationRecord
   include Votable
   include Commentable
 
+  after_create :send_question_updates
+
   belongs_to :question
   belongs_to :user
 
@@ -17,6 +19,14 @@ class Answer < ApplicationRecord
       end
 
       self.update!(favorite: true)
+    end
+  end
+
+  private
+
+  def send_question_updates
+    Subscription.find_each.each do |s|
+      QuestionUpdateJob.perform_later(s.user, self)
     end
   end
 end
