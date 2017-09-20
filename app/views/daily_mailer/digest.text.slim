@@ -1,0 +1,6 @@
+' Daily#digest
+
+= @questions.each do |question|
+  = question.title
+  = question_url(question)
+  = question.body

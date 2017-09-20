@@ -53,6 +53,11 @@ gem 'doorkeeper'
 gem 'active_model_serializers', '~> 0.10.6'
 gem 'oj'
 gem 'oj_mimic_json'
+#gem 'delayed_job_active_record'
+gem 'sidekiq'
+gem 'sidetiq'
+gem 'whenever'
+gem 'sinatra', '>= 1.3.0', require: nil
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
