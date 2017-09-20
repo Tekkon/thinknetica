@@ -37,28 +37,20 @@ RSpec.describe Answer, type: :model do
 
   context '#send_question_updates' do
     let(:question) { create(:question) }
-    let(:answer) { build(:answer, question: question) }
-    let!(:users) { create_list(:user, 2) } #, subscriptions: create_list(:subscription, 1, question: question)) }
+    let(:object) { build(:answer, question: question) }
+    let(:method) { 'send_question_updates' }
+    let!(:users) { create_list(:user, 2) }
     let!(:subscription1) { create(:subscription, user: users.first, question: question) }
     let!(:subscription2) { create(:subscription, user: users.last, question: question) }
 
-    it 'triggers send_question_updates on create' do
-      expect(answer).to receive(:send_question_updates)
-      answer.save
-    end
-
-    it 'does not trigger send_question_updates on update' do
-      answer.save
-      expect(answer).to_not receive(:send_question_updates)
-      answer.update(body: 'new answer')
-    end
+    it_behaves_like 'after create'
 
     it 'sends created answer to subscribers' do
-      users.each do |user|
-        expect(QuestionUpdateJob).to receive(:perform_later).with(user, answer).and_call_original
+      Subscription.where(question_id: question) do |s|
+        expect(QuestionUpdateJob).to receive(:perform_later).with(s.user, object).and_call_original
       end
 
-      answer.save
+      object.save
     end
   end
 end

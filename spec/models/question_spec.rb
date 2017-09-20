@@ -16,20 +16,13 @@ RSpec.describe Question, type: :model do
 
   context "#create_subscription" do
     let(:user) { create(:user) }
-    let(:question) { build(:question, user: user) }
+    let(:object) { build(:question, user: user) }
+    let(:method) { 'create_subscription' }
 
-    it 'triggers create_subscription on create' do
-      expect(question).to receive(:create_subscription)
-      question.save
-    end
-
-    it 'does not trigger create_subscription on update' do
-      expect(question).to receive(:create_subscription)
-      question.update(body: 'new question')
-    end
+    it_behaves_like 'after create'
 
     it 'creates subscription' do
-      expect { question.save }.to change(Subscription, :count).by(1)
+      expect { object.save }.to change(Subscription, :count).by(1)
     end
   end
 end
