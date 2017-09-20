@@ -6,4 +6,10 @@ class DailyMailer < ApplicationMailer
 
     mail to: user.email
   end
+
+  def question_update(user, answer)
+    @answer = answer
+
+    mail to: user.email
+  end
 end
