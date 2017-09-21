@@ -1,0 +1,1 @@
+a.subscribe-link href="/questions/#{@question_id}/subscriptions" data-question-id="#{@question_id}" data-method="post" data-remote="true" Subscribe

@@ -12,6 +12,10 @@ class Question < ApplicationRecord
 
   validates :title, :body, presence: true
 
+  def get_subscription(user)
+    subscriptions.where(user: user).first
+  end
+
   private
 
   def create_subscription

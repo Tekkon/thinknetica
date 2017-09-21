@@ -96,5 +96,13 @@ describe Ability do
       it { should be_able_to :revote, voted_question, user: user}
       it { should_not be_able_to :revote, create(:question, user: another_user), user: user }
     end
+
+    context 'Subscription' do
+      it { should be_able_to :read, Subscription }
+      it { should be_able_to :create, Subscription }
+
+      it { should be_able_to :destroy, question.subscriptions.first, user: user }
+      it { should_not be_able_to :destroy, create(:subscription, question: question, user: another_user), user: user }
+    end
   end
 end

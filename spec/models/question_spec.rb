@@ -25,4 +25,24 @@ RSpec.describe Question, type: :model do
       expect { object.save }.to change(Subscription, :count).by(1)
     end
   end
+
+  context "#get_subscription" do
+    let(:user) { create(:user) }
+
+    context 'subscription exists' do
+      let!(:question) { create(:question, user: user) }
+
+      it 'returns subscription' do
+        expect(question.get_subscription(user)).to eq question.subscriptions.first
+      end
+    end
+
+    context 'subscription does not exist' do
+      let(:question) { create(:question) }
+
+      it 'returns nothing' do
+        expect(question.get_subscription(user)).to eq nil
+      end
+    end
+  end
 end

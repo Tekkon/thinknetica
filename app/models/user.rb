@@ -16,6 +16,11 @@ class User < ApplicationRecord
     self.id == object.user_id
   end
 
+  def subscriber_of?(question)
+    return false unless question
+    self.subscriptions.any? { |s| s.question == question }
+  end
+
   def self.find_for_oauth(auth)
     authorization = Authorization.where(provider: auth.provider, uid: auth.uid.to_s).first
     return authorization.user if authorization

@@ -22,10 +22,18 @@
         br
         = render question.comments
 
-    - if user_signed_in? && current_user.author_of?(question)
-      = link_to 'Edit', '', class: 'edit-question-link', data: { question_id: question.id }
-      br
-      = link_to 'Delete', question_path(question), method: :delete, remote: true
+    - if user_signed_in?
+      - if current_user.author_of?(question)
+        = link_to 'Edit', '', class: 'edit-question-link', data: { question_id: question.id }
+        br
+        = link_to 'Delete', question_path(question), method: :delete, remote: true
+        br
+
+      div id="question-#{question.id}-subscription"
+        - if current_user.subscriber_of?(question)
+          = link_to 'Unsubscribe', subscription_path(question.get_subscription(current_user)), class: 'unsubscribe-link', data: { question_id: question.id }, method: :delete, remote: true
+        - else
+          = link_to 'Subscribe', question_subscriptions_path(question), class: 'subscribe-link', data: { question_id: question.id }, method: :post, remote: true
 
       = form_for question, remote: true, html: { id: "edit-question-#{question.id}" } do |f|
         div id="question-#{question.id}-errors"

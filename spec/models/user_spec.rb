@@ -30,6 +30,25 @@ RSpec.describe User, type: :model do
     end
   end
 
+  context '#subscriber_of?' do
+    let(:user) { create(:user) }
+    let(:another_user) { create(:user) }
+    let(:question) { create(:question, user: user) }
+    let(:another_question) { create(:question, user: another_user) }
+
+    it 'returns true if user is the subscriber of the question' do
+      expect(user).to be_subscriber_of(question)
+    end
+
+    it 'returns fale is user is not the subscriber of the question' do
+      expect(user).to_not be_subscriber_of(another_question)
+    end
+
+    it 'returns false if parameter is nil' do
+      expect(user).to_not be_subscriber_of(nil)
+    end
+  end
+
   describe '.find_for_oauth' do
     let!(:user) { create(:user) }
     let(:auth) { OmniAuth::AuthHash.new(provider: 'facebook', uid: '12345') }
