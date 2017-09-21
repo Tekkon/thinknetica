@@ -9,10 +9,16 @@ class User < ApplicationRecord
   has_many :votes, dependent: :destroy
   has_many :comments, dependent: :destroy
   has_many :authorizations, dependent: :destroy
+  has_many :subscriptions, dependent: :destroy
 
   def author_of?(object)
     return false unless object
     self.id == object.user_id
+  end
+
+  def subscriber_of?(question)
+    return false unless question
+    self.subscriptions.any? { |s| s.question == question }
   end
 
   def self.find_for_oauth(auth)

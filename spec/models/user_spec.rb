@@ -6,6 +6,7 @@ RSpec.describe User, type: :model do
   it { should have_many(:votes).dependent(:destroy) }
   it { should have_many(:comments).dependent(:destroy) }
   it { should have_many(:authorizations).dependent(:destroy) }
+  it { should have_many(:subscriptions).dependent(:destroy) }
 
   it { should validate_presence_of :email }
   it { should validate_presence_of :password }
@@ -26,6 +27,25 @@ RSpec.describe User, type: :model do
 
     it 'returns false if parameter is nil' do
       expect(user).to_not be_author_of(nil)
+    end
+  end
+
+  context '#subscriber_of?' do
+    let(:user) { create(:user) }
+    let(:another_user) { create(:user) }
+    let(:question) { create(:question, user: user) }
+    let(:another_question) { create(:question, user: another_user) }
+
+    it 'returns true if user is the subscriber of the question' do
+      expect(user).to be_subscriber_of(question)
+    end
+
+    it 'returns fale is user is not the subscriber of the question' do
+      expect(user).to_not be_subscriber_of(another_question)
+    end
+
+    it 'returns false if parameter is nil' do
+      expect(user).to_not be_subscriber_of(nil)
     end
   end
 

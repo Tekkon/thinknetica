@@ -3,6 +3,8 @@ class Answer < ApplicationRecord
   include Votable
   include Commentable
 
+  after_create :send_question_updates
+
   belongs_to :question
   belongs_to :user
 
@@ -18,5 +20,11 @@ class Answer < ApplicationRecord
 
       self.update!(favorite: true)
     end
+  end
+
+  private
+
+  def send_question_updates
+    QuestionUpdateJob.perform_later(self)
   end
 end

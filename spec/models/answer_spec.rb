@@ -34,4 +34,21 @@ RSpec.describe Answer, type: :model do
       expect(favorite_answer.favorite).to eq false
     end
   end
+
+  context '#send_question_updates' do
+    let(:question) { create(:question) }
+    let(:object) { build(:answer, question: question) }
+    let(:method) { 'send_question_updates' }
+    let!(:users) { create_list(:user, 2) }
+    let!(:subscription1) { create(:subscription, user: users.first, question: question) }
+    let!(:subscription2) { create(:subscription, user: users.last, question: question) }
+
+    it_behaves_like 'after create'
+
+    it 'sends created answer to subscribers' do
+      expect(QuestionUpdateJob).to receive(:perform_later).with(object).and_call_original
+
+      object.save
+    end
+  end
 end
