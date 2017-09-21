@@ -64,19 +64,19 @@ $ ->
     question_id = $(this).data('questionId')
     $('#question-' + question_id + '-subscription').html(JST['templates/subscribe']({ question_id: question_id}))
   ).on('ajax:error', '.unsubscribe-link', (e, data, status, xhr) ->
-    result = $.parseJSON(data.responseText)
-    question_id = $(this).data('questionId')
-    $('#question-' + question_id + '-subscription').prepend(result.error)
+    show_error(data, $(this).data('questionId'))
   )
 
   $(document).on('ajax:success', '.subscribe-link', (e, data, status, xhr) ->
     result = $.parseJSON(xhr.responseText)
     $('#question-' + result.question_id + '-subscription').html(JST['templates/unsubscribe'](result))
   ).on('ajax:error', '.subscribe-link', (e, data, status, xhr) ->
-    result = $.parseJSON(data.responseText)
-    question_id = $(this).data('questionId')
-    $('#question-' + question_id + '-subscription').prepend(result.error)
+    show_error(data, $(this).data('questionId'))
   )
+
+  show_error =(data, question_id) ->
+    result = $.parseJSON(data.responseText)
+    $('#question-' + question_id + '-subscription').prepend(result.error)
 
   unless gon.question_id
     App.cable.subscriptions.create('QuestionsChannel', {

@@ -46,9 +46,7 @@ RSpec.describe Answer, type: :model do
     it_behaves_like 'after create'
 
     it 'sends created answer to subscribers' do
-      Subscription.where(question_id: question) do |s|
-        expect(QuestionUpdateJob).to receive(:perform_later).with(s.user, object).and_call_original
-      end
+      expect(QuestionUpdateJob).to receive(:perform_later).with(object).and_call_original
 
       object.save
     end

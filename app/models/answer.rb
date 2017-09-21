@@ -25,8 +25,6 @@ class Answer < ApplicationRecord
   private
 
   def send_question_updates
-    Subscription.find_each.each do |s|
-      QuestionUpdateJob.perform_later(s.user, self)
-    end
+    QuestionUpdateJob.perform_later(self)
   end
 end

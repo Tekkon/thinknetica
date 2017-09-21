@@ -7,6 +7,6 @@ RSpec.describe QuestionUpdateJob, type: :job do
 
   it 'should send email about new answer to the author of the question' do
     expect(DailyMailer).to receive(:question_update).with(user, answer).and_call_original
-    QuestionUpdateJob.perform_now(user, answer)
+    QuestionUpdateJob.perform_now(answer)
   end
 end
