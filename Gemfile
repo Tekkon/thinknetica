@@ -58,6 +58,8 @@ gem 'sidekiq'
 gem 'sidetiq'
 gem 'whenever'
 gem 'sinatra', '>= 1.3.0', require: nil
+gem 'mysql2'
+gem 'thinking-sphinx'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
