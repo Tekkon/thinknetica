@@ -14,7 +14,9 @@ feature 'User can delete his answer', %q{
   scenario 'Authenticated user tries to delete his answer', js: true do
     sign_in(user)
     visit question_path(question)
-    click_on 'Delete'
+    within '.answers' do
+      click_on 'Delete'
+    end
 
     expect(current_path).to eq question_path(question)
     expect(page).to_not have_content answer.body

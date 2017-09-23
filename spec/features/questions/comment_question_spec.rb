@@ -10,7 +10,10 @@ feature 'Comment question', %q{
   given!(:question) { create(:question, user: user) }
 
   context 'Authenticated user' do
-    before { sign_in(user) }
+    before do
+      sign_in(user)
+      visit question_path(question)
+    end
 
     scenario 'creates a comment', js: true do
       click_on 'Comment'
@@ -34,11 +37,11 @@ feature 'Comment question', %q{
     scenario "answer appears on another user's page", js: true do
       Capybara.using_session('user') do
         sign_in(user)
-        visit questions_path
+        visit question_path(question)
       end
 
       Capybara.using_session('guest') do
-        visit questions_path
+        visit question_path(question)
       end
 
       Capybara.using_session('user') do
@@ -57,7 +60,7 @@ feature 'Comment question', %q{
 
   context 'Unauthenticated user' do
     scenario "doesn't see comment link" do
-      visit questions_path
+      visit question_path(question)
       expect(page).to_not have_link 'Comment'
     end
   end

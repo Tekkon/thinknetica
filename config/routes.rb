@@ -39,6 +39,7 @@ Rails.application.routes.draw do
 
   match '/users/:id/finish_signup' => 'users#finish_signup', via: [:get, :patch], as: :finish_signup
   post '/users/:id/send_finish_signup_email' => 'users#send_finish_signup_email', as: :send_finish_signup_email
+  get '/search' => 'search#index'
 
   namespace :api do
     namespace :v1 do

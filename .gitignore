@@ -26,4 +26,5 @@ config/database.yml
 config/environments/*
 config/secrets.yml
 config/*.sphinx.conf
+config/thinking_sphinx.yml
 db/sphinx

@@ -1,7 +1,9 @@
 h1 Question list
 
 .questions
-  = render @questions
+  - @questions.each do |question|
+    = link_to question.title, question_path(question)
+    br
 
 br
 - if can?(:create, Question)
