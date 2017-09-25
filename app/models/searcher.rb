@@ -1,11 +1,11 @@
-module SearchHelper
-  def search(object, text)
+class Searcher
+  def self.search(object, text)
     @result = []
 
     if object == 'all'
       source = ThinkingSphinx.search(text, page: 1)
     else
-      source = object.classify.constantize.search(params[:text], page: 1)
+      source = object.classify.constantize.search(text, page: 1)
     end
 
     if source

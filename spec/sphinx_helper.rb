@@ -11,5 +11,5 @@ module SphinxHelpers
 end
 
 RSpec.configure do |config|
-  config.include SphinxHelpers
+  config.include SphinxHelpers, type: :feature
 end

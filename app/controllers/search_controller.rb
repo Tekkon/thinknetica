@@ -1,7 +1,5 @@
 class SearchController < ApplicationController
-  include SearchHelper
-
   def index
-    respond_with search(params[:object], params[:text])
+    respond_with(@result = Searcher.search(params[:object], params[:text]))
   end
 end
