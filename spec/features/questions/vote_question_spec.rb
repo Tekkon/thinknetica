@@ -14,7 +14,7 @@ feature 'Question voting', %q{
   context 'Not author of the question' do
     before do
       sign_in(another_user)
-      visit questions_path
+      visit question_path(questions[0])
     end
 
     scenario 'votes for question', js: true do
@@ -45,6 +45,8 @@ feature 'Question voting', %q{
     end
 
     scenario 'can revote for or against question', js: true do
+      visit question_path(questions[1])
+
       within "#question-#{questions[1].id}" do
         click_on 'Revote'
         expect(page).to have_content 'Rating: 0'
@@ -59,7 +61,7 @@ feature 'Question voting', %q{
   context 'Author of the question' do
     before do
       sign_in(user)
-      visit questions_path
+      visit question_path(questions[0])
     end
 
     scenario 'tries to vote for his question' do
@@ -70,20 +72,16 @@ feature 'Question voting', %q{
 
   context 'Unauthorized user' do
     scenario 'tries to vote for question' do
-      visit questions_path
+      visit question_path(questions[0])
       expect(page).to_not have_content 'Vote for'
       expect(page).to_not have_content 'Vote against'
     end
   end
 
   scenario 'Any user sees the rating of the question' do
-    visit questions_path
+    visit question_path(questions[0])
 
     within "#question-#{questions[0].id}" do
-      expect(page).to have_content('Rating')
-    end
-
-    within "#question-#{questions[1].id}" do
       expect(page).to have_content('Rating')
     end
   end

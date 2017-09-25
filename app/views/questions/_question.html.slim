@@ -16,6 +16,17 @@
 
     br
 
+    #question_attachments
+      = label :attachments, 'Attachments:'
+      ul
+        - question.attachments.each do |a|
+          - if a.persisted?
+            li id="attachment-#{a.id}"
+              = link_to a.file.identifier, a.file.url
+              br
+              - if user_signed_in? && current_user.author_of?(question)
+                = link_to 'remove', attachment_path(a), data: { remote: true, method: :delete }
+
     div id="question-#{question.id}-comments"
       = label :comments, 'Comments:'
       - if question.comments.any?

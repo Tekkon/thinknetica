@@ -14,7 +14,6 @@ feature 'User can browse a list of questions', %q{
 
     questions.each do |q|
       expect(page).to have_content(q.title)
-      expect(page).to have_content(q.body)
     end
   end
 

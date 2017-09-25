@@ -12,7 +12,7 @@ feature 'Subscribe to question', %q{
   context 'Authenticated user' do
     before do
       sign_in(user)
-      visit questions_path
+      visit question_path(question)
     end
 
     context 'is not subscribed to question yet' do
@@ -33,7 +33,7 @@ feature 'Subscribe to question', %q{
 
     context 'is subscribed already' do
       given!(:subsctiption) { create(:subscription, user: user, question: question) }
-      before { visit questions_path }
+      before { visit question_path(question) }
 
       scenario 'sees the Subscribe link' do
         expect(page).to_not have_content 'Subscribe'

@@ -11,14 +11,14 @@ feature 'Question editing', %q{
   given!(:question) { create(:question, user: user) }
 
   scenario 'Unauthenticated user tries to edit the question' do
-    visit questions_path
+    visit question_path(question)
     expect(page).to_not have_link 'Edit'
   end
 
   describe 'Author' do
     before do
       sign_in user
-      visit questions_path
+      visit question_path(question)
     end
 
     scenario 'sees the link to Edit' do
@@ -32,7 +32,7 @@ feature 'Question editing', %q{
       fill_in 'Question', with: 'edited question'
       click_on 'Save'
 
-      expect(current_path).to eq questions_path
+      expect(current_path).to eq question_path(question)
       expect(page).to_not have_content question.title
       expect(page).to_not have_content question.body
       expect(page).to have_content 'edited title'
@@ -54,7 +54,7 @@ feature 'Question editing', %q{
   describe 'Not author' do
     before do
       sign_in another_user
-      visit questions_path
+      visit question_path(question)
     end
 
     scenario "tries to edit other's question" do

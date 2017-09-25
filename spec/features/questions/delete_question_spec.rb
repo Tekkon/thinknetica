@@ -7,32 +7,36 @@ feature 'User can delete his question', %q{
 } do
 
   given(:user) { create(:user) }
-  given(:question) { create(:question, user_id: user.id) }
+  given!(:question) { create(:question, user: user) }
 
-  scenario 'Authenticated user tries to delete his question', js: true do
-    sign_in(user)
+  context 'Authenticated user' do
+    given(:another_user) { create(:user) }
+    given!(:another_question) { create(:question, user: another_user) }
 
-    question
-    visit questions_path
-    click_on 'Delete'
+    scenario 'tries to delete his question', js: true do
+      sign_in(user)
 
-    expect(page).to_not have_content question.title
-    expect(page).to_not have_content question.body
+      question
+      visit question_path(question)
+      click_on 'Delete'
+
+      expect(page).to_not have_content question.title
+      expect(page).to_not have_content question.body
+    end
+
+    scenario 'tries to delete another\'s question' do
+      sign_in(user)
+
+      visit question_path(another_question)
+      expect(page).to_not have_content 'Delete'
+    end
   end
 
-  scenario 'Authenticated user tries to delete another\'s question' do
-    sign_in(user)
-
-    another_user = create(:user)
-    create(:question, user_id: another_user.id)
-    visit questions_path
-    expect(page).to_not have_content 'Delete'
-  end
-
-  scenario 'Non-authenticated user tries to delete a question' do
-    create(:question, user_id: user.id)
-    visit questions_path
-    expect(page).to_not have_content 'Delete'
+  context 'Non-authenticated user' do
+    scenario  'tries to delete a question' do
+      visit question_path(question)
+      expect(page).to_not have_content 'Delete'
+    end
   end
 
 end
