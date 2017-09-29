@@ -24,7 +24,6 @@ config/database.yml
 .idea
 /public
 config/environments/*
-config/secrets.yml
 config/*.sphinx.conf
 config/thinking_sphinx.yml
 db/sphinx
