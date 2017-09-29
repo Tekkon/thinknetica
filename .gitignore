@@ -27,3 +27,4 @@ config/environments/*
 config/*.sphinx.conf
 config/thinking_sphinx.yml
 db/sphinx
+Gemfile.lock
