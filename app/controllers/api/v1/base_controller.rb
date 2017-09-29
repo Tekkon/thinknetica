@@ -1,8 +1,6 @@
 require "application_responder"
 
 class Api::V1::BaseController < ActionController::Base
-  include ActionController::Serialization
-
   before_action :doorkeeper_authorize!
 
   self.responder = ApplicationResponder

@@ -13,7 +13,8 @@ class Api::V1::AnswersController < Api::V1::BaseController
   end
 
   def create
-    respond_with(@answer = @question.answers.create(answer_params))
+    @answer = @question.answers.create(answer_params)
+    respond_with(:api, :v1, @answer)
   end
 
   private

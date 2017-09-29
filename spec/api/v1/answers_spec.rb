@@ -60,9 +60,9 @@ describe 'Answer API' do
 
     context 'authorized' do
       context 'with valid attributes' do
-        let(:request) { post "/api/v1/questions/#{question.id}/answers", answer: attributes_for(:answer), access_token: access_token.token, format: :json }
+        let(:request) { post "/api/v1/questions/#{question.id}/answers", params: { answer: attributes_for(:answer), access_token: access_token.token, format: :json } }
         let(:answer) { Answer.last }
-        let(:answer_path) { answer_path }
+        let(:answer_path) { '' }
 
         it_behaves_like 'creatable'
 

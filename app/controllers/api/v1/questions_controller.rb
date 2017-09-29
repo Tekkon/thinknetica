@@ -11,7 +11,7 @@ class Api::V1::QuestionsController < Api::V1::BaseController
   end
 
   def create
-    respond_with(@question = Question.create(question_params))
+    respond_with(:api, :v1, @question = Question.create(question_params))
   end
 
   private
