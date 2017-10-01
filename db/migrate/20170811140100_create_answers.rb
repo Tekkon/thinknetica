@@ -5,5 +5,7 @@ class CreateAnswers < ActiveRecord::Migration[5.0]
 
       t.timestamps
     end
+
+    add_belongs_to :answers, :question
   end
 end
