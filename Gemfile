@@ -56,7 +56,7 @@ gem 'sidetiq'
 gem 'whenever'
 gem 'sinatra', '>= 1.3.0', require: nil
 gem 'mysql2'
-gem 'thinking-sphinx'
+gem 'thinking-sphinx', '3.3.0'
 gem 'dotenv'
 gem 'dotenv-deployment', require: 'dotenv/deployment'
 gem 'therubyracer'
@@ -82,6 +82,7 @@ group :development do
   gem 'capistrano-bundler', require: false
   gem 'capistrano-rails', require: false
   gem 'capistrano-rvm', require: false
+  #gem 'capistrano-sidekiq', require: false
 end
 
 group :test do
