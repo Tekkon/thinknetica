@@ -1,5 +1,5 @@
 - if answer.persisted?
-  - cache answer do
+  - cache "answer/#{user_signed_in?}" do
     div id="answer-#{answer.id}"
       = answer.body
       br
