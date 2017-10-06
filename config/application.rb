@@ -30,5 +30,7 @@ module Thinknetica
     end
 
     config.action_cable.disable_request_forgery_protection = false
+
+    config.cache_store = :redis_store, 'redis://localhost:6379/0/cache', { expires_in: 90.minutes }
   end
 end
