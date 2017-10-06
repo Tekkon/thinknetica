@@ -5,7 +5,7 @@ class Answer < ApplicationRecord
 
   after_create :send_question_updates
 
-  belongs_to :question
+  belongs_to :question, touch: true
   belongs_to :user
 
   validates :body, presence: true

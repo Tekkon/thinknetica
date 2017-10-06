@@ -1,5 +1,6 @@
 - if comment.persisted?
-  p
-    = comment.user.email
-    br
-    = comment.body
+  - cache comment do
+    p
+      = comment.user.email
+      br
+      = comment.body

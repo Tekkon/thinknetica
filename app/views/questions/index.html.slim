@@ -1,9 +1,10 @@
 h1 Question list
 
-.questions
-  - @questions.each do |question|
-    = link_to question.title, question_path(question)
-    br
+- cache collection_cache_key_for :question do
+  .questions
+    - @questions.each do |question|
+      = link_to question.title, question_path(question)
+      br
 
 br
 - if can?(:create, Question)

@@ -1,58 +1,59 @@
 - if answer.persisted?
-  div id="answer-#{answer.id}"
-    = answer.body
-    br
-    div id="answer-#{answer.id}-rating"
-      = "Rating: #{answer.rating}"
-    br
-
-    - if user_signed_in?
-      div id="answer-#{answer.id}-vote"
-        = render 'shared/vote_buttons', votable: answer
-
-      div id="answer-#{answer.id}-vote-result"
-        = render 'shared/vote_result', votable: answer
-
-    br
-
-    div id="answer-#{answer.id}-comments"
-      = label :comments, 'Comments:'
-      - if answer.comments.any?
-        br
-        = render answer.comments
-
-    - if answer.attachments.any?
-      div id="answer-#{answer.id}-attachments"
-        = label :answer_attachments, 'Attachments:'
-        ul
-          - answer.attachments.each do |a|
-            - if a.persisted?
-              li id="attachment-#{a.id}"
-                = link_to a.file.identifier, a.file.url
-                br
-                - if user_signed_in? && current_user.author_of?(answer)
-                  = link_to 'remove', attachment_path(a), data: {remote: true, method: :delete}
-
-    - if user_signed_in? && current_user.author_of?(@question)
-      = label :favorite, 'Favorite'
-      = radio_button 'rb', 'favorite', "answer_#{answer.id}", checked: answer.favorite, class: 'favorite-check', data: { remote: true, method: :put,
-              url: mark_favorite_question_answer_path(@question, answer) }
+  - cache "answer/#{user_signed_in?}" do
+    div id="answer-#{answer.id}"
+      = answer.body
+      br
+      div id="answer-#{answer.id}-rating"
+        = "Rating: #{answer.rating}"
       br
 
-    - if user_signed_in? && current_user.author_of?(answer)
-      = link_to 'Edit', '', class: 'edit-answer-link', data: { answer_id: answer.id }
-      br
-      = link_to 'Delete', question_answer_path(@question,answer), method: :delete, remote: true
+      - if user_signed_in?
+        div id="answer-#{answer.id}-vote"
+          = render 'shared/vote_buttons', votable: answer
+
+        div id="answer-#{answer.id}-vote-result"
+          = render 'shared/vote_result', votable: answer
+
       br
 
-      = form_for [@question, answer], remote: true, html: { id: "edit-answer-#{answer.id}" } do |f|
-        div id="answer-#{answer.id}-errors"
-          = render "shared/error_messages", target: answer
-          = f.label :body, "Answer"
-          = f.text_area :body
+      div id="answer-#{answer.id}-comments"
+        = label :comments, 'Comments:'
+        - if answer.comments.any?
           br
-          = f.submit 'Save'
+          = render answer.comments
 
-    = render 'shared/comment_form', commentable: answer
+      - if answer.attachments.any?
+        div id="answer-#{answer.id}-attachments"
+          = label :answer_attachments, 'Attachments:'
+          ul
+            - answer.attachments.each do |a|
+              - if a.persisted?
+                li id="attachment-#{a.id}"
+                  = link_to a.file.identifier, a.file.url
+                  br
+                  - if user_signed_in? && current_user.author_of?(answer)
+                    = link_to 'remove', attachment_path(a), data: {remote: true, method: :delete}
 
-  br
+      - if user_signed_in? && current_user.author_of?(@question)
+        = label :favorite, 'Favorite'
+        = radio_button 'rb', 'favorite', "answer_#{answer.id}", checked: answer.favorite, class: 'favorite-check', data: { remote: true, method: :put,
+                url: mark_favorite_question_answer_path(@question, answer) }
+        br
+
+      - if user_signed_in? && current_user.author_of?(answer)
+        = link_to 'Edit', '', class: 'edit-answer-link', data: { answer_id: answer.id }
+        br
+        = link_to 'Delete', question_answer_path(@question,answer), method: :delete, remote: true
+        br
+
+        = form_for [@question, answer], remote: true, html: { id: "edit-answer-#{answer.id}" } do |f|
+          div id="answer-#{answer.id}-errors"
+            = render "shared/error_messages", target: answer
+            = f.label :body, "Answer"
+            = f.text_area :body
+            br
+            = f.submit 'Save'
+
+      = render 'shared/comment_form', commentable: answer
+
+    br
