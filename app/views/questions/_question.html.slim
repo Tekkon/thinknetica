@@ -1,63 +1,62 @@
 - if question.persisted?
-  - cache "question/#{question.id}/#{user_signed_in?}" do
-    div id="question-#{question.id}"
-      = link_to question.title, question_path(question)
-      br
-      = question.body
-      br
-      div id="question-#{question.id}-rating"
-        = "Rating: #{question.rating}"
+  /- cache "question/#{question.id}/#{user_signed_in?}" do
+  div id="question-#{question.id}"
+    = link_to question.title, question_path(question)
+    br
+    = question.body
+    br
+    div id="question-#{question.id}-rating"
+      = "Rating: #{question.rating}"
 
-      - if user_signed_in?
-        div id="question-#{question.id}-vote"
-          = render 'shared/vote_buttons', votable: question
+    - if user_signed_in?
+      div id="question-#{question.id}-vote"
+        = render 'shared/vote_buttons', votable: question
 
-        div id="question-#{question.id}-vote-result"
-          = render 'shared/vote_result', votable: question
-
-      br
-
-      #question_attachments
-        = label :attachments, 'Attachments:'
-        ul
-          - question.attachments.each do |a|
-            - if a.persisted?
-              li id="attachment-#{a.id}"
-                = link_to a.file.identifier, a.file.url
-                br
-                - if user_signed_in? && current_user.author_of?(question)
-                  = link_to 'remove', attachment_path(a), data: { remote: true, method: :delete }
-
-      div id="question-#{question.id}-comments"
-        = label :comments, 'Comments:'
-        - if question.comments.any?
-          br
-          = render question.comments
-
-      - if user_signed_in?
-        - if current_user.author_of?(question)
-          = link_to 'Edit', '', class: 'edit-question-link', data: { question_id: question.id }
-          br
-          /= link_to 'Delete', question_path(question), method: :delete, remote: true
-          /br
-
-        div id="question-#{question.id}-subscription"
-          - if current_user.subscriber_of?(question)
-            = link_to 'Unsubscribe', subscription_path(question.get_subscription(current_user)), class: 'unsubscribe-link', data: { question_id: question.id }, method: :delete, remote: true
-          - else
-            = link_to 'Subscribe', question_subscriptions_path(question), class: 'subscribe-link', data: { question_id: question.id }, method: :post, remote: true
-
-        = form_for question, remote: true, html: { id: "edit-question-#{question.id}" } do |f|
-          div id="question-#{question.id}-errors"
-            = render "shared/error_messages", target: question
-          = f.label :title
-          = f.text_field :title
-          br
-          = f.label :body, "Question"
-          = f.text_area :body
-          br
-          = f.submit 'Save'
-
-      = render 'shared/comment_form', commentable: question
+      div id="question-#{question.id}-vote-result"
+        = render 'shared/vote_result', votable: question
 
     br
+
+    #question_attachments
+      = label :attachments, 'Attachments:'
+      ul
+        - question.attachments.each do |a|
+          - if a.persisted?
+            li id="attachment-#{a.id}"
+              = link_to a.file.identifier, a.file.url
+              br
+              - if user_signed_in? && current_user.author_of?(question)
+                = link_to 'remove', attachment_path(a), data: { remote: true, method: :delete }
+
+    div id="question-#{question.id}-comments"
+      = label :comments, 'Comments:'
+      - if question.comments.any?
+        br
+        = render question.comments
+
+    - if user_signed_in?
+      - if current_user.author_of?(question)
+        = link_to 'Edit', '', class: 'edit-question-link', data: { question_id: question.id }
+        br
+        = link_to 'Delete', question_path(question), method: :delete, remote: true
+        br
+
+      div id="question-#{question.id}-subscription"
+        - if current_user.subscriber_of?(question)
+          = link_to 'Unsubscribe', subscription_path(question.get_subscription(current_user)), class: 'unsubscribe-link', data: { question_id: question.id }, method: :delete, remote: true
+        - else
+          = link_to 'Subscribe', question_subscriptions_path(question), class: 'subscribe-link', data: { question_id: question.id }, method: :post, remote: true
+
+      = form_for question, remote: true, html: { id: "edit-question-#{question.id}" } do |f|
+        div id="question-#{question.id}-errors"
+          = render "shared/error_messages", target: question
+        = f.label :title
+        = f.text_field :title
+        br
+        = f.label :body, "Question"
+        = f.text_area :body
+        br
+        = f.submit 'Save'
+
+    = render 'shared/comment_form', commentable: question
+
